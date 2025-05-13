@@ -10,13 +10,12 @@ Api.interceptors.request.use(config => {
   const storedData = localStorage.getItem('loginData');
   var data = JSON.parse(storedData!) as AuthUser;
 
-  if (data.tokenJwt && !config.url?.includes('/auth/login')) {
+  if (!config.url?.includes('/auth/login') && data?.tokenJwt) {
     config.headers.Authorization = `Bearer ${data.tokenJwt}`
   }
 
   return config
 }, error => {
-  console.log(error)
   return Promise.reject(error)
 })
 

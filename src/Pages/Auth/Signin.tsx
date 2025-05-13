@@ -24,6 +24,7 @@ function Signin() {
   };
 
   const handleLoginError = (error: any) => {
+    console.log(error)
     const responseInfo = error?.response?.data; 
           console.log(responseInfo)
     if (responseInfo?.httpStatus === 404) {
