@@ -2,7 +2,7 @@ import axios from 'axios'
 import { AuthUser } from "@/Services/authService"
 
 const Api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "https://localhost:7113/",
   timeout: 5000,
 })
 
@@ -16,6 +16,7 @@ Api.interceptors.request.use(config => {
 
   return config
 }, error => {
+  console.log(error)
   return Promise.reject(error)
 })
 

@@ -27,9 +27,11 @@ export const fetchAuthUser = async (email: string, password: string) => {
     email,
     password,
   };
+console.log(loginData)
+
   const response = await Api.post<AuthUser>("/Auth/Login", loginData);
 
-
+  console.log(response)
   if (response.data?.responseInfo?.httpStatus! >= 400) {
     const errorMessage = response.data.responseInfo?.errorDescription || "Erro desconhecido";
     throw new Error(errorMessage);

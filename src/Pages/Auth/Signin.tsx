@@ -7,7 +7,7 @@ import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { useLoginUser } from "../../hooks/userAuthUser";
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom';
-import fundo from '../../../public/capa-controle-financeiro-quantosobra.png'
+import fundo from '../../assets/capa-controle-financeiro-quantosobra.png'
 
 function Signin() {
 
@@ -24,10 +24,8 @@ function Signin() {
   };
 
   const handleLoginError = (error: any) => {
-    const responseInfo = error?.response?.data?.responseInfo;
-
-    console.error(responseInfo);
-
+    const responseInfo = error?.response?.data; 
+          console.log(responseInfo)
     if (responseInfo?.httpStatus === 404) {
       setEmailInvalid(true);
     }

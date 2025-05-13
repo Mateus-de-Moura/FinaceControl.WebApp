@@ -7,8 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 import { GetUsers } from "@/Services/UsersService"
 import { useMemo } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import True from '../../../public/true.svg'
-import False from '../../../public/false.svg'
+import True from '../../assets/true.svg'
+import False from '../../assets/false.svg'
 import { Edit } from "react-feather";
 import { Input } from "@/components/ui/input";
 
