@@ -5,7 +5,6 @@ import { Link } from "react-router"
 import {
   ArrowUpCircleIcon,
   LayoutDashboardIcon,
-  ListIcon,
   BarChartIcon,
   FolderIcon,
   UsersIcon,

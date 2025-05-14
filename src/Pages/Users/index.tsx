@@ -1,6 +1,6 @@
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Link } from "react-router"
-import {Pagination,PaginationContent,PaginationItem,PaginationLink,PaginationNext,PaginationPrevious,} from "@/components/ui/pagination"
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, } from "@/components/ui/pagination"
 import { useState } from "react"
 import { DataTable } from "@/components/ui/DataTable/data-table"
 import { useQuery } from "@tanstack/react-query";
@@ -11,6 +11,8 @@ import True from '../../assets/true.svg'
 import False from '../../assets/false.svg'
 import { Edit } from "react-feather";
 import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react"
+import { Card } from "@/components/ui/card"
 
 interface UsersTableProps {
     Id: string;
@@ -23,6 +25,7 @@ function index() {
 
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
+    const [inputUser, setInputUser] = useState("");
 
     const usersQuery = useQuery({
         queryKey: ['users', search, page],
@@ -94,63 +97,71 @@ function index() {
     );
 
     return (
-        <div className="p-5">
-            <div className="flex items-center justify-between gap-12 mb-8">
+        <div className="p-5 ">
+            <div className="flex items-center justify-between gap-12 mb-3">
                 <h6 className="font-semibold">Gerenciamento de Usuários</h6>
                 <Link to="/Users/Create" className={buttonVariants({ variant: "default", size: "sm" })}>Cadastrar novo Usuário</Link>
             </div>
+            <Card className="p-5 bg-white">
 
-            <div className='w-full flex flex-1 flex-col mt-5'>
-                <div className='w-72 self-end '>
-                    <Input
-                        type='text'
-                        placeholder='Buscar'
-                        value={search}
-                        onChange={e => setSearch(e.target.value)}
-                        className='border rounded'
-                    />
+
+                <div className='w-full flex justify-end gap-2'>
+                    <div className='w-72 self-end '>
+                        <Input
+                            type='text'
+                            placeholder='Buscar'
+                            value={inputUser}
+                            onChange={e => setInputUser(e.target.value)}
+                            className='border rounded'
+                        />
+                    </div>
+                    <div className='self-end'>
+                        <Button className="h-9" size="sm" variant={"secondary"}
+                            onClick={() => setSearch(inputUser)}><Search /></Button>
+                    </div>
                 </div>
-            </div>
 
-            <div className="mt-3 mb-3">
-                <DataTable columns={usersColumns} data={data} />
-            </div>
+                <div className="mt-3 mb-3">
+                    <DataTable columns={usersColumns} data={data} />
+                </div>
 
-            <div className="pl-6 pr-6 mt-5">
-                <Pagination>
-                    <PaginationContent>
+                <div className="pl-6 pr-6 mt-5">
+                    <Pagination>
+                        <PaginationContent>
 
-                        <PaginationItem>
-                            <PaginationPrevious
-                                href="#"
-                                onClick={() => handlePageChange(currentPage - 1)}
-                                className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
-                            />
-                        </PaginationItem>
-
-                        {pages.map(p => (
-                            <PaginationItem key={p}>
-                                <PaginationLink
+                            <PaginationItem>
+                                <PaginationPrevious
                                     href="#"
-                                    isActive={p === currentPage}
-                                    onClick={() => handlePageChange(p)}
-                                >
-                                    {p}
-                                </PaginationLink>
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                                />
                             </PaginationItem>
-                        ))}
 
-                        <PaginationItem>
-                            <PaginationNext
-                                href="#"
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
-                            />
-                        </PaginationItem>
+                            {pages.map(p => (
+                                <PaginationItem key={p}>
+                                    <PaginationLink
+                                        href="#"
+                                        isActive={p === currentPage}
+                                        onClick={() => handlePageChange(p)}
+                                    >
+                                        {p}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            ))}
 
-                    </PaginationContent>
-                </Pagination>
-            </div>
+                            <PaginationItem>
+                                <PaginationNext
+                                    href="#"
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                                />
+                            </PaginationItem>
+
+                        </PaginationContent>
+                    </Pagination>
+                </div>
+
+            </Card>
         </div>
     )
 }

@@ -7,8 +7,14 @@ import { AppSidebar } from "@/components/ui/app-sidebar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { SiteHeader } from "@/components/ui/site-header"
 import CreateUser from "@/Pages/Users/Create";
+import { ReactNode } from 'react';
+import Account  from  '../Pages/Account/index'
 
-function LayoutWithSidebar({ children }) {
+interface LayoutWithSidebarProps {
+  children: ReactNode;
+}
+
+function LayoutWithSidebar({ children }: LayoutWithSidebarProps) {
   return (
     <SidebarProvider>
       <AppSidebar variant="sidebar"  collapsible="icon"/>
@@ -44,6 +50,13 @@ function index() {
         <PrivateRoute>
           <LayoutWithSidebar>
             <CreateUser />
+          </LayoutWithSidebar>
+        </PrivateRoute>} />
+
+         <Route path="/Account" element={
+        <PrivateRoute>
+          <LayoutWithSidebar>
+            <Account />
           </LayoutWithSidebar>
         </PrivateRoute>} />
     </Routes>
