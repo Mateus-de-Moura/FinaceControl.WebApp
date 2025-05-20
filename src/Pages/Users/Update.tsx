@@ -1,0 +1,135 @@
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { buttonVariants } from "@/components/ui/button"
+import { useForm } from "react-hook-form";
+import { ValidationSchema, validationSchema } from './Validations/schema'
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Card, CardContent } from "@/components/ui/card"
+import { useQueryClient } from '@tanstack/react-query';
+import { GetAllRoles, GetUserById } from '@/Services/UsersService';
+import { useQuery } from '@tanstack/react-query';
+
+interface role {
+  id: string;
+  name: string
+}
+
+const Update = () => {
+  const { id } = useParams<{ id: string }>();
+  const rolesQuery = useQuery({ queryKey: ['roles'], queryFn: GetAllRoles });
+  const response = useQuery({ queryKey: ['user'], queryFn: () => GetUserById(id as string) });
+  const user = response.data?.data
+
+  const queryClient = useQueryClient();
+
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<ValidationSchema>({
+    resolver: zodResolver(validationSchema),
+  });
+
+
+  const onSubmit = async (data: any) => {
+    // const { ...rest } = data;
+    // mutation.mutate({
+    //   ...rest
+    // })
+    console.log(data)
+  }
+
+  const onError = (errors: any) => {
+    console.log("form errors", errors);
+  };
+
+
+  return (
+    <div className="p-5">
+      <div className="flex items-center justify-between gap-12 mb-3">
+        <h6 className="font-semibold">Editar Usuário</h6>
+        <Link to="/Users" className={buttonVariants({ variant: "default", size: "sm" })}>Voltar</Link>
+      </div>
+      <Card className='p-5'>
+        <CardContent >
+          <form className="flex h-full flex-col gap-5 " onSubmit={handleSubmit(onSubmit, onError)}>
+
+            <div className="flex gap-4">
+              <div className='card '>
+                <div className="w-[5%] flex items-center gap-2">
+                  <input value={user?.active} {...register('Active')} type='checkbox' />
+                  <p>{errors.Active?.message}</p>
+                  <label className='font-semibold'>Ativo</label>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="w-[50%]">
+                <label className='font-semibold'>Nome *</label>
+                <Input value={user?.name} {...register('Name')} type='text' />
+                <p className='text-red-500'>{errors.Name?.message}</p>
+              </div>
+
+              <div className="w-[50%] gap-1">
+                <label className='mb-1 font-semibold'>Sobrenome *</label>
+
+                <Input value={user?.surname} {...register('Surname')} type='text' />
+                <p className='text-red-500'>{errors.Surname?.message}</p>
+              </div>
+            </div>
+
+            <div className='flex gap-4'>
+
+              <div className="w-[50%]">
+                <label className='font-semibold'>Nome do usuário *</label>
+                <Input value={user?.userName} {...register('userName')} type='mail' placeholder='Nickname do usuário' />
+                <p className='text-red-500'>{errors.Email?.message}</p>
+              </div>
+            </div>
+
+            <div className='flex gap-4'>
+
+              <div className="w-[50%]">
+                <label className='font-semibold'>Email *</label>
+                <Input value={user?.email} {...register('Email')} type='mail' />
+                <p className='text-red-500'>{errors.Email?.message}</p>
+              </div>
+
+              <div className='w-[50%]'>
+                <label className='font-semibold'>Cargo *</label>
+                <Select defaultValue="0" value={user?.appRoleId} {...register('RoleId')} onValueChange={(value) => setValue('RoleId', value)} >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Theme" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem key="0" value="0" disabled   >Selecione</SelectItem >
+                    {rolesQuery &&
+                      rolesQuery.data?.data?.map((role: role) => {
+                        return (
+                          <SelectItem key={role.id} value={role.id}>
+                            {role.name}
+                          </SelectItem>
+                        )
+                      })
+                    }
+
+                  </SelectContent>
+                </Select>
+                {errors.RoleId && <p className='text-red-500'>{errors.RoleId.message}</p>}
+              </div>
+            </div>    
+
+            <div className="w-[100%] mt-3 flex justify-between">
+              <Button type="submit" variant="secondary">Salvar</Button>
+            </div>
+
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default Update;

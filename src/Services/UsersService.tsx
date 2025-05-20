@@ -10,19 +10,42 @@ export const GetUsers = async (search: string, page: number) => {
   return response.data;
 }
 
-export function Create(users: any) {
-  console.log(users)
-  return Api.post('/api/User', users)
+export function Create(user: any) {
+  console.log(user)
+  const formData = new FormData();
+
+  formData.append('Active', String(user.Active));
+  formData.append('Name', user.Name || '');
+  formData.append('Surname', user.Surname || '');
+  formData.append('Username', user.userName || '');
+  formData.append('Email', user.Email || '');
+  formData.append('Password', user.PassWord || '');
+  formData.append('Username', user.Username || '');
+  formData.append('RoleId', user.RoleId);
+
+  if (user.Photo) {
+    formData.append('Photo', user.Photo);
+  }
+
+  return Api.post('/api/User', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
 }
 
 export function GetAllRoles() {
   return Api.get('/api/User/Roles');
 }
 
+export function GetUserById(Id: string){
+return Api.get(`/api/User/update/${Id}`);
+}
+
 export function updatePhoto(photo: File, email: string) {
   const formData = new FormData();
   formData.append('Photo', photo);
-  formData.append('EmailUser', email); 
+  formData.append('EmailUser', email);
 
   return Api.put('/api/User/update-photo', formData, {
     headers: {

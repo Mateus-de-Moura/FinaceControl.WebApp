@@ -6,6 +6,8 @@ import { Separator } from '@/components/ui/separator';
 import { useState, useEffect } from 'react';
 import { updatePhoto } from '@/Services/UsersService';
 import { useAuth } from '@/Pages/Auth/AuthContext';
+import { toast } from 'react-toastify';
+import { useMemo } from 'react';
 
 interface OverviewProps {
   onViewChange: (view: string) => void;
@@ -14,6 +16,8 @@ interface OverviewProps {
 const Overview: React.FC<OverviewProps> = ({ onViewChange }) => {
   const { user, updatePhoto: updatePhotoContext } = useAuth();
   const [image, setImage] = useState<string | null>(null);
+  const successToastId = useMemo(() => 'successToastId', []);
+  const errorToastId = useMemo(() => 'errorToastId', []);
 
   useEffect(() => {
     if (user?.photo) {
@@ -25,20 +29,33 @@ const Overview: React.FC<OverviewProps> = ({ onViewChange }) => {
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (!selectedFile || !user?.email) return;
-
     const reader = new FileReader();
-    reader.onloadend = () => {
-      setImage(reader.result as string);
-    };
-    reader.readAsDataURL(selectedFile);
 
     try {
       const response = await updatePhoto(selectedFile, user.email);
-      const novaFoto = response.data;   
-      updatePhotoContext(novaFoto);
-      window.location.reload();
+      const novaFoto = response.data;
+
+      toast('Foto atualizada com sucesso!', {
+        toastId: successToastId,
+        type: 'success',
+        autoClose: 1000,
+        onClose: () => {
+          updatePhotoContext(novaFoto);
+
+          reader.onloadend = () => {
+            setImage(reader.result as string);
+          };
+          
+          reader.readAsDataURL(selectedFile);
+          window.location.reload();
+        }
+      });
+
     } catch (error) {
-      console.error("Erro ao enviar a foto:", error);
+      toast('Erro ao Atualizar foto. Tente novamente!', {
+        toastId: successToastId,
+        type: 'success',
+      });
     }
   };
 

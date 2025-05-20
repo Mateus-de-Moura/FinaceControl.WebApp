@@ -107,14 +107,14 @@ function Create() {
                         <div className="flex gap-4">
                             <div className="w-[50%]">
                                 <label className='font-semibold'>Nome *</label>
-                                <Input {...register('Name')} type='text' required />
+                                <Input {...register('Name')} type='text'  />
                                 <p className='text-red-500'>{errors.Name?.message}</p>
                             </div>
 
                             <div className="w-[50%] gap-1">
                                 <label className='mb-1 font-semibold'>Sobrenome *</label>
 
-                                <Input {...register('Surname')} type='text' required />
+                                <Input {...register('Surname')} type='text'  />
                                 <p className='text-red-500'>{errors.Surname?.message}</p>
                             </div>
                         </div>
@@ -123,7 +123,7 @@ function Create() {
 
                             <div className="w-[50%]">
                                 <label className='font-semibold'>Nome do usuário *</label>
-                                <Input {...register('userName')} type='mail' required  placeholder='Nickname do usuário'/>
+                                <Input {...register('userName')} type='mail'   placeholder='Nickname do usuário'/>
                                 <p className='text-red-500'>{errors.Email?.message}</p>
                             </div>
                         </div>
@@ -132,13 +132,13 @@ function Create() {
 
                             <div className="w-[50%]">
                                 <label className='font-semibold'>Email *</label>
-                                <Input {...register('Email')} type='mail' required />
+                                <Input {...register('Email')} type='mail'  />
                                 <p className='text-red-500'>{errors.Email?.message}</p>
                             </div>
 
                             <div className='w-[50%]'>
                                 <label className='font-semibold'>Cargo *</label>
-                                <Select defaultValue="0" {...register('RoleId')} onValueChange={(value) => setValue('RoleId', value)} required>
+                                <Select defaultValue="0" {...register('RoleId')} onValueChange={(value) => setValue('RoleId', value)} >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Theme" />
                                     </SelectTrigger>
@@ -164,13 +164,13 @@ function Create() {
 
                             <div className="w-[50%]">
                                 <label className='font-semibold'>Senha *</label>
-                                <Input {...register('PassWord')} type='passWord' required />
+                                <Input {...register('PassWord')} type='passWord'  />
                                 <p className='text-red-500' >{errors.PassWord?.message}</p>
                             </div>
 
                             <div className="w-[50%]">
                                 <label className='font-semibold'>Confirme a Senha *</label>
-                                <Input {...register('ConfirmPassWord')} type='passWord' required />
+                                <Input {...register('ConfirmPassWord')} type='passWord'  />
                                 <p className='text-red-500'>{errors.ConfirmPassWord?.message}</p>
                             </div>
                         </div>

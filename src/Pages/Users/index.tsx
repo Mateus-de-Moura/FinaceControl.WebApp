@@ -86,7 +86,7 @@ function index() {
                 accessorKey: 'id',
                 cell: info => {
                     return (
-                        <Link to={`/user/update/${info.getValue()}`}>
+                        <Link to={`/Users/Update/${info.getValue()}`}>
                             <Edit size={16} />
                         </Link>
                     );

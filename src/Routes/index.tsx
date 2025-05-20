@@ -8,7 +8,8 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { SiteHeader } from "@/components/ui/site-header"
 import CreateUser from "@/Pages/Users/Create";
 import { ReactNode } from 'react';
-import Account  from  '../Pages/Account/index'
+import Account from '../Pages/Account/index'
+import Update from "@/Pages/Users/Update";
 
 interface LayoutWithSidebarProps {
   children: ReactNode;
@@ -17,7 +18,7 @@ interface LayoutWithSidebarProps {
 function LayoutWithSidebar({ children }: LayoutWithSidebarProps) {
   return (
     <SidebarProvider>
-      <AppSidebar variant="sidebar"  collapsible="icon"/>
+      <AppSidebar variant="sidebar" collapsible="icon" />
       <SidebarInset>
         <SiteHeader />
         {children}
@@ -46,14 +47,21 @@ function index() {
           </LayoutWithSidebar>
         </PrivateRoute>} />
 
-        <Route path="/Users/create" element={
+      <Route path="/Users/create" element={
         <PrivateRoute>
           <LayoutWithSidebar>
             <CreateUser />
           </LayoutWithSidebar>
         </PrivateRoute>} />
 
-         <Route path="/Account" element={
+      <Route path="/Users/update/:id" element={
+        <PrivateRoute>
+          <LayoutWithSidebar>
+            <Update />
+          </LayoutWithSidebar>
+        </PrivateRoute>} />
+
+      <Route path="/Account" element={
         <PrivateRoute>
           <LayoutWithSidebar>
             <Account />
