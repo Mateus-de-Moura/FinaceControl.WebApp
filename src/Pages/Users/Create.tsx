@@ -97,7 +97,7 @@ function Create() {
                         <div className="flex gap-4">
                             <div className='card '>
                                 <div className="w-[5%] flex items-center gap-2">
-                                    <input {...register('Active')} type='checkbox' onChange={(e) => setIsActive(e.target.checked)} />
+                                    <input {...register('Active')} type='checkbox' onChange={(e) => setIsActive(e.target.checked)} checked />
                                     <p>{errors.Active?.message}</p>
                                     <label className='font-semibold'>Ativo</label>
                                 </div>

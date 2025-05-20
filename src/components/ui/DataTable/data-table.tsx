@@ -33,13 +33,13 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="rounded-md border overflow-hidden">
-      <Table>
+      <Table className="table-fixed w-full">
         <TableHeader className="bg-[#2898f5] rounded-t-md ">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id} className="text-white">
+                  <TableHead key={header.id}  className={`text-white ${header.column.columnDef.meta?.className ?? ''}`}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -60,7 +60,7 @@ export function DataTable<TData, TValue>({
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell  className={cell.column.columnDef.meta?.className ?? ''} key={cell.id} >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -68,7 +68,7 @@ export function DataTable<TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell colSpan={columns.length} className="h-24 text-center" >
                 No results.
               </TableCell>
             </TableRow>

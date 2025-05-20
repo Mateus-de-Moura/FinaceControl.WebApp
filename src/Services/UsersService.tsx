@@ -34,12 +34,37 @@ export function Create(user: any) {
   });
 }
 
+export function UpdateUser(user: any) {
+  console.log(user)
+  const formData = new FormData();
+  
+  formData.append('Id', user.Id);
+  formData.append('Active', String(user.Active));
+  formData.append('Name', user.Name || '');
+  formData.append('Surname', user.Surname || '');
+  formData.append('Username', user.userName || '');
+  formData.append('Email', user.Email || '');
+  formData.append('Password', user.PassWord || '');
+  formData.append('Username', user.Username || '');
+  formData.append('RoleId', user.RoleId);
+
+  if (user.Photo) {
+    formData.append('Photo', user.Photo);
+  }
+
+  return Api.put('/api/User/update', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
+}
+
 export function GetAllRoles() {
   return Api.get('/api/User/Roles');
 }
 
-export function GetUserById(Id: string){
-return Api.get(`/api/User/update/${Id}`);
+export function GetUserById(Id: string) {
+  return Api.get(`/api/User/update/${Id}`);
 }
 
 export function updatePhoto(photo: File, email: string) {

@@ -34,6 +34,7 @@ function index() {
 
     const currentPage = page;
     const totalPages = usersQuery.data?.totalPages || 1;
+    const totalCount = usersQuery.data?.totalCount
 
     const handlePageChange = (newPage: number) => {
         if (newPage < 1 || newPage > totalPages) return;
@@ -41,6 +42,7 @@ function index() {
     };
 
     const data = usersQuery.data?.items || [];
+
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     const usersColumns = useMemo<ColumnDef<UsersTableProps>[]>(
@@ -62,11 +64,16 @@ function index() {
                             {IsActive ? <img src={True} alt="Ativo" /> : <img src={False} alt="Inativo" />}
                         </div>)
                 },
-
+                meta: {
+                    className: "w-[100px] min-w-[100px] ",
+                }
             },
             {
                 header: 'Nome',
                 accessorKey: 'name',
+                meta: {
+                    className: "w-[100px] min-w-[100px] ",
+                }
             },
             {
                 header: 'Cargo',
@@ -79,6 +86,9 @@ function index() {
                             <span className="green-box">{Office}</span>
                         </div>
                     );
+                },
+                meta: {
+                    className: "w-[100px] min-w-[100px] ",
                 }
             },
             {
@@ -90,6 +100,9 @@ function index() {
                             <Edit size={16} />
                         </Link>
                     );
+                },
+                meta: {
+                    className: "w-[100px] min-w-[100px] ",
                 }
             },
         ],
@@ -102,7 +115,7 @@ function index() {
                 <h6 className="font-semibold">Gerenciamento de Usuários</h6>
                 <Link to="/Users/Create" className={buttonVariants({ variant: "default", size: "sm" })}>Cadastrar novo Usuário</Link>
             </div>
-            <Card className="p-5 bg-white">
+            <Card className="p-5 bg-white h-screen">
 
 
                 <div className='w-full flex justify-end gap-2'>
@@ -121,17 +134,16 @@ function index() {
                     </div>
                 </div>
 
-                <div className="mt-3 mb-3">
+                <div className="mt-3 mb-3 h-full">
                     <DataTable columns={usersColumns} data={data} />
                 </div>
 
                 <div className="pl-6 pr-6 mt-5">
                     <Pagination>
                         <PaginationContent>
-
                             <PaginationItem>
                                 <PaginationPrevious
-                                    href="#"
+
                                     onClick={() => handlePageChange(currentPage - 1)}
                                     className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
                                 />
@@ -140,7 +152,7 @@ function index() {
                             {pages.map(p => (
                                 <PaginationItem key={p}>
                                     <PaginationLink
-                                        href="#"
+
                                         isActive={p === currentPage}
                                         onClick={() => handlePageChange(p)}
                                     >
@@ -151,11 +163,16 @@ function index() {
 
                             <PaginationItem>
                                 <PaginationNext
-                                    href="#"
+
                                     onClick={() => handlePageChange(currentPage + 1)}
                                     className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
                                 />
                             </PaginationItem>
+
+                            <PaginationItem>
+                                <div className="ml-8">Mostrando {data.length} de {totalCount} Registros</div>
+                            </PaginationItem>
+
 
                         </PaginationContent>
                     </Pagination>
