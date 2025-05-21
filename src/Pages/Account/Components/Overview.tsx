@@ -97,7 +97,7 @@ const Overview: React.FC<OverviewProps> = ({ onViewChange }) => {
           <h6 className="mb-4">Mantenha seus métodos de verificação e informações de segurança atualizados.</h6>
         </div>
         <div className="flex justify-center items-center mt-5">
-          <div onClick={() => onViewChange('security')} className='text-blue-500'>Atualizar Informações</div>
+          <div onClick={() => onViewChange('security')} className='text-blue-500 hover:cursor-pointer'>Atualizar Informações</div>
         </div>
       </div>
 
@@ -127,7 +127,7 @@ const Overview: React.FC<OverviewProps> = ({ onViewChange }) => {
           <h6 className="mb-4">Veja quando e onde você entrou e verifique se algo parece incomum.</h6>
         </div>
         <div className="flex justify-center items-center mt-5">
-          <Link className='text-blue-500' to="/">Examinar atividades recentes</Link>
+          <div className='text-blue-500 hover:cursor-pointer' onClick={() => onViewChange('LoginLocationData')}>Examinar atividades recentes</div>
         </div>
       </div>
     </div>

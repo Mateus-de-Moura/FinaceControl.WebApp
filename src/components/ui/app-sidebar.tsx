@@ -4,6 +4,7 @@ import { Link } from "react-router"
 
 import {
   ArrowUpCircleIcon,
+  ChartNoAxesCombined,
   LayoutDashboardIcon,
   BarChartIcon,
   FolderIcon,
@@ -26,7 +27,7 @@ import { NavUser } from "@/components/ui/nav-user"
 const navItems = [
   { title: "Home", url: "/home", icon: LayoutDashboardIcon },
   { title: "Usuários", url: "/Users", icon: UsersIcon },
-  { title: "Analytics", url: "/analytics", icon: BarChartIcon },
+  { title: "Receitas", url: "/Receitas", icon: ChartNoAxesCombined },
   { title: "Projects", url: "/projects", icon: FolderIcon },
   { title: "Team", url: "/team", icon: UsersIcon },
 ]

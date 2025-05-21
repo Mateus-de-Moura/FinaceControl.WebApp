@@ -1,11 +1,6 @@
 import { useQuery, UseQueryResult, useMutation } from "@tanstack/react-query";
 import { fetchAuthUser } from "../Services/authService";
-
-export interface AuthUser {
-  id: string;
-  name: string;
-  email: string;
-}
+import { AuthUser } from "@/common/Interfaces/AuthUser.d";
 
 export function useLoginUser(email: string, password: string) {
   return useMutation<AuthUser, Error>({

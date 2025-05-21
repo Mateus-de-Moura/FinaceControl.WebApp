@@ -10,6 +10,7 @@ import CreateUser from "@/Pages/Users/Create";
 import { ReactNode } from 'react';
 import Account from '../Pages/Account/index'
 import Update from "@/Pages/Users/Update";
+import Revenues from '@/Pages/Revenues/index'
 
 interface LayoutWithSidebarProps {
   children: ReactNode;
@@ -58,6 +59,13 @@ function index() {
         <PrivateRoute>
           <LayoutWithSidebar>
             <Update />
+          </LayoutWithSidebar>
+        </PrivateRoute>} />
+
+        <Route path="/Receitas" element={
+        <PrivateRoute>
+          <LayoutWithSidebar>
+            <Revenues />
           </LayoutWithSidebar>
         </PrivateRoute>} />
 

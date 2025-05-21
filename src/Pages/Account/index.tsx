@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Overview from './Components/Overview';
-import SecurityInfos from './Components/securityInfos';
-
+import SecurityInfos from './Components/SecurityInfos';
+import LoginLocationData from './Components/LoginLocationData';
 
 const Account = () => {
 
@@ -12,9 +12,9 @@ const Account = () => {
     }
 
     return (
-        <div className='flex p-5 h-full mb-5'>
-            <div className='w-[30%] h-full'>
-                <ul className='p-3 mb-8'>
+        <div className='flex  h-full w-full '>
+            <div className='w-[25%] h-full bg-gray-50'>
+                <ul className='p-3 mb-8 mt-5'>
                     <li className='mb-3 font-semibold cursor-pointer hover:border px-5
                      hover:border-gray-100 hover:rounded hover:bg-gray-100' onClick={() => setActiveView("overview")}>
                         Visão Geral
@@ -28,17 +28,17 @@ const Account = () => {
                         Senha
                     </li>
                     <li className='mb-3 font-semibold cursor-pointer px-5 hover:border
-                     hover:border-gray-100 hover:rounded hover:bg-gray-100' onClick={() => setActiveView("privacy")}>
-                        Configuração de privacidade
+                     hover:border-gray-100 hover:rounded hover:bg-gray-100' onClick={() => setActiveView("LoginLocationData")}>
+                        atividades recentes
                     </li>
                 </ul>
             </div>
 
-            <section className='w-[70%] h-full px-5 mb-5'>
+            <section className='w-full h-full px-5 mb-5 mt-5'>
                 {activeView === 'overview' && <Overview onViewChange={setActiveView} />}
                 {activeView === 'security' && <SecurityInfos />}
                 {activeView === 'password' && <div>Senha</div>}
-                {activeView === 'privacy' && <div>Privacidade</div>}
+                {activeView === 'LoginLocationData' && <LoginLocationData/>}
             </section>
         </div>
 
