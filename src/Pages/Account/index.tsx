@@ -5,11 +5,7 @@ import LoginLocationData from './Components/LoginLocationData';
 
 const Account = () => {
 
-    const [activeView, setActiveView] = useState<string>('overview');
-
-    const handleSecutiryInfos = () => {
-
-    }
+    const [activeView, setActiveView] = useState<string>('overview');  
 
     return (
         <div className='flex  h-full w-full '>

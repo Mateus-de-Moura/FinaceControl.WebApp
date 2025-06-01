@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import {
     Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select"
-import { useState } from 'react';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Card, CardContent } from "@/components/ui/card"
 import { useMemo } from 'react';
@@ -18,17 +17,17 @@ import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
 
 
-interface UsersProps {
-    Id: string;
-    Active: boolean;
-    Name: string;
-    Surname: string;
-    UserName: string;
-    Email: string;
-    PassWord: string;
-    ConfirmPassWord: string;    
-    RoleId: string;
-}
+// interface UsersProps {
+//     Id: string;
+//     Active: boolean;
+//     Name: string;
+//     Surname: string;
+//     UserName: string;
+//     Email: string;
+//     PassWord: string;
+//     ConfirmPassWord: string;    
+//     RoleId: string;
+// }
 
 interface role {
     id: string;
@@ -38,8 +37,7 @@ interface role {
 
 function Create() {
     const rolesQuery = useQuery({ queryKey: ['roles'], queryFn: GetAllRoles });
-
-    const [isActive, setIsActive] = useState<boolean>(false);
+    
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
@@ -70,7 +68,7 @@ function Create() {
         resolver: zodResolver(validationSchema),
     });
 
-    const onSubmit = async (data: UsersProps) => {           
+    const onSubmit = async (data: any) => {           
         const { ...rest } = data;
         mutation.mutate({
             ...rest
@@ -97,7 +95,7 @@ function Create() {
                         <div className="flex gap-4">
                             <div className='card '>
                                 <div className="w-[5%] flex items-center gap-2">
-                                    <input {...register('Active')} type='checkbox' onChange={(e) => setIsActive(e.target.checked)} checked />
+                                    <input {...register('Active')} type='checkbox' checked />
                                     <p>{errors.Active?.message}</p>
                                     <label className='font-semibold'>Ativo</label>
                                 </div>

@@ -16,20 +16,18 @@ import { CreateRevenues } from '@/Services/RevenuesService';
 import { GetCategories } from '@/Services/CategoryService';
 import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
-import React, { useEffect } from 'react';
-import $ from 'jquery';
 import 'jquery-mask-plugin';
 
 
 
-interface RevenuesProps {
-    Id: string;
-    Active: boolean;
-    Description: string;
-    Value: string;
-    Date: string;
-    CategoryId: string;
-}
+// interface RevenuesProps {
+//     Id: string;
+//     Active: boolean;
+//     Description: string;
+//     Value: string;
+//     Date: string;
+//     CategoryId: string;
+// }
 
 interface Category {
     id: string;
@@ -70,7 +68,7 @@ function Create() {
         resolver: zodResolver(validationSchema),
     });
 
-    const onSubmit = async (data: RevenuesProps) => {
+    const onSubmit = async (data: any) => {
         const {  ...rest } = data; 
   
 
@@ -83,9 +81,9 @@ function Create() {
         console.log("form errors", errors);
     };
 
-    useEffect(() => {
-        $('.money-mask').mask('000.000.000,00', { reverse: true });
-    }, []);
+    // useEffect(() => {
+    //     $('.money-mask').mask('000.000.000,00', { reverse: true });
+    // }, []);
 
 
     return (

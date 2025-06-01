@@ -42,7 +42,7 @@ export function DataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className={`text-white ${header.column.columnDef.meta?.className ?? ''}`}
+                    className={`text-white ${header.column.columnDef.meta ?? ''}`}
                   >
                     {header.isPlaceholder
                       ? null
@@ -61,7 +61,7 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
-                      className={cell.column.columnDef.meta?.className ?? ''}
+                  
                       key={cell.id}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

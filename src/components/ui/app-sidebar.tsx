@@ -5,8 +5,7 @@ import { Link } from "react-router"
 import {
   ArrowUpCircleIcon,
   ChartNoAxesCombined,
-  LayoutDashboardIcon,
-  BarChartIcon,
+  LayoutDashboardIcon, 
   FolderIcon,
   UsersIcon,
 } from "lucide-react"

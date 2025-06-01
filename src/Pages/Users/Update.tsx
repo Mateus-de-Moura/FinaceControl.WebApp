@@ -18,17 +18,17 @@ import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { UpdateUser } from "@/Services/UsersService";
 
-interface UsersProps {
-    Id: string;
-    Active: boolean;
-    Name: string;
-    Surname: string;
-    UserName: string;
-    Email: string;
-    PassWord: string;
-    ConfirmPassWord: string;    
-    RoleId: string;
-}
+// interface UsersProps {
+//     Id: string;
+//     Active: boolean;
+//     Name: string;
+//     Surname: string;
+//     UserName: string;
+//     Email: string;
+//     PassWord: string;
+//     ConfirmPassWord: string;    
+//     RoleId: string;
+// }
 
 interface role {
   id: string;
@@ -89,7 +89,7 @@ const Update = () => {
   })
 
 
-  const onSubmit = async (data: UsersProps) => {
+  const onSubmit = async (data: any) => {
     const { ...rest } = data;
     mutation.mutate({
       ...rest,

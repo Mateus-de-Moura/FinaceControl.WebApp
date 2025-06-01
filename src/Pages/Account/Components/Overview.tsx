@@ -53,7 +53,7 @@ const Overview: React.FC<OverviewProps> = ({ onViewChange }) => {
 
     } catch (error) {
       toast('Erro ao Atualizar foto. Tente novamente!', {
-        toastId: successToastId,
+        toastId: errorToastId,
         type: 'success',
       });
     }

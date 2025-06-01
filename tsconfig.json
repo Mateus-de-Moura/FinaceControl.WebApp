@@ -6,6 +6,15 @@
   ],
   "compilerOptions": {
     "baseUrl": ".",
+  "noEmitOnError": false,
+    "strict": true,    // ou "false", dependendo do nível de rigor que você quer no TS
+    "esModuleInterop": true,
+    "skipLibCheck": true,  // Pode ajudar a evitar problemas em arquivos de bibliotecas
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./dist",
     "paths": {
       "@/*": ["./src/*"]
     }

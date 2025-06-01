@@ -16,7 +16,7 @@ function Signin() {
   const [password, setPassword] = useState('');
   const [emailInvalid, setEmailInvalid] = useState(false);
 
-  const { mutate: loginUser, isPending, error } = useLoginUser(email, password);
+  const { mutate: loginUser, isPending } = useLoginUser(email, password);
 
   const handleLoginSuccess = () => {
     localStorage.setItem('Logado', 'Logado');
