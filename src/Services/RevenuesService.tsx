@@ -10,6 +10,9 @@ export const GetRevenues = async (search: string, page: number) => {
   return response.data;
 }
 
-export const GetCategories = async () =>{
-  return Api.get('/api/Category/GetAllCategory')
+export function CreateRevenues(revenues: any) {
+
+   return Api.post('/api/Revenues',revenues);
 }
+
+

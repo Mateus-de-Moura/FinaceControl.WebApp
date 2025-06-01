@@ -11,6 +11,7 @@ import { ReactNode } from 'react';
 import Account from '../Pages/Account/index'
 import Update from "@/Pages/Users/Update";
 import Revenues from '@/Pages/Revenues/index'
+import RevenuesCreate from '../Pages/Revenues/Create'
 
 interface LayoutWithSidebarProps {
   children: ReactNode;
@@ -62,12 +63,21 @@ function index() {
           </LayoutWithSidebar>
         </PrivateRoute>} />
 
-        <Route path="/Receitas" element={
+      <Route path="/Receitas" element={
         <PrivateRoute>
           <LayoutWithSidebar>
             <Revenues />
           </LayoutWithSidebar>
         </PrivateRoute>} />
+
+         <Route path="/Receitas/Create" element={
+        <PrivateRoute>
+          <LayoutWithSidebar>
+            <RevenuesCreate />
+          </LayoutWithSidebar>
+        </PrivateRoute>} />
+
+
 
       <Route path="/Account" element={
         <PrivateRoute>

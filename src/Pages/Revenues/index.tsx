@@ -94,7 +94,7 @@ function index() {
             },
             {
                 header: 'Categoria',
-                accessorKey: 'categoryId',
+                accessorKey: 'category',
                 meta: {
                     className: "w-[100px] min-w-[100px] ",
                 }
@@ -120,7 +120,7 @@ function index() {
         <div className="p-5 ">
             <div className="flex items-center justify-between gap-12 mb-3">
                 <h6 className="font-semibold">Gerenciamento Receitas</h6>
-                <Link to="/Users/Create" className={buttonVariants({ variant: "default", size: "sm" })}>
+                <Link to="/Receitas/Create" className={buttonVariants({ variant: "default", size: "sm" })}>
                     Cadastrar nova receita</Link>
             </div>
             <Card className="p-5 bg-white h-screen">

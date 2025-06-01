@@ -1,5 +1,3 @@
-
-import "leaflet/dist/leaflet.css";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Info } from "lucide-react";
 import * as Tooltip from "@radix-ui/react-tooltip";
