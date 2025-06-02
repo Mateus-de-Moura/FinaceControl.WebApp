@@ -43,7 +43,7 @@ function Signin() {
   return (
     <main className="h-screen flex w-full ">
       <div
-        className="w-full h-full flex p-4 bg-cover bg-center"
+        className="w-full h-full hidden p-4 bg-cover bg-center md:block "
         style={{ backgroundImage: `url(${fundo})` }}
       >
       </div>

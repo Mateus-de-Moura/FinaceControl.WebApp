@@ -60,7 +60,7 @@ const Overview: React.FC<OverviewProps> = ({ onViewChange }) => {
   };
 
   return (
-    <div className='grid grid-cols-2 gap-6'>
+    <div className='grid grid-cols-1 sm:grid-cols-2 gap-10'>
       <div className="p-5 border shadow-lg rounded-2xl">
         <div className="flex justify-center items-center mb-4">
           <label htmlFor="upload-photo" className="cursor-pointer">

@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { AuthUser } from "@/Services/authService"
+const apiUrl = process.env.REACT_APP_API_URL;
 
 const Api = axios.create({
-  baseURL: "https://localhost:7113/",
+  baseURL: apiUrl,
   timeout: 5000,
 })
 
