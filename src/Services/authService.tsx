@@ -39,9 +39,7 @@ export const fetchAuthUser = async (email: string, password: string) => {
   }
 
   localStorage.setItem('loginData', JSON.stringify(response.data));
-
-
-
+ 
   return response.data;
 };
 

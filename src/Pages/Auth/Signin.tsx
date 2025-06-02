@@ -8,6 +8,7 @@ import { useLoginUser } from "../../hooks/userAuthUser";
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom';
 import fundo from '../../assets/capa-controle-financeiro-quantosobra.png'
+import { useAuth } from "./AuthContext"
 
 function Signin() {
 
@@ -15,10 +16,12 @@ function Signin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailInvalid, setEmailInvalid] = useState(false);
+  const { setUser } = useAuth();
 
   const { mutate: loginUser, isPending } = useLoginUser(email, password);
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (data: any) => {
+    setUser(data)
     localStorage.setItem('Logado', 'Logado');
     navigate('/home');
   };

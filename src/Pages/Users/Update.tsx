@@ -18,18 +18,6 @@ import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { UpdateUser } from "@/Services/UsersService";
 
-// interface UsersProps {
-//     Id: string;
-//     Active: boolean;
-//     Name: string;
-//     Surname: string;
-//     UserName: string;
-//     Email: string;
-//     PassWord: string;
-//     ConfirmPassWord: string;    
-//     RoleId: string;
-// }
-
 interface role {
   id: string;
   name: string
@@ -42,7 +30,6 @@ const Update = () => {
   const response = useQuery({ queryKey: ['user'], queryFn: () => GetUserById(id as string) });
 
   const user = response.data?.data;
-  console.log(user)
 
   const navigate = useNavigate();
 

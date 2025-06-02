@@ -3,13 +3,15 @@ import { createContext, useContext, useEffect, useState } from 'react';
 export interface AuthUser {
   email: string;
   name: string;
-  photo: string; 
+  photo: string;
 }
 
 interface AuthContextType {
   user: AuthUser | null;
   setUser: (user: AuthUser) => void;
   updatePhoto: (newPhotoBase64: string) => void;
+  login: (userData: AuthUser) => void;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,18 +24,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (user) {
-      localStorage.setItem('loginData', JSON.stringify(user));
+      localStorage.setItem('loginData', JSON.stringify(user)); 
+    } else {
+      localStorage.removeItem('loginData'); 
     }
   }, [user]);
 
+  
+  const login = (userData: AuthUser) => {
+    setUser(userData);  
+  };
+  
+  const logout = () => {
+    setUser(null); 
+  };
+
   const updatePhoto = (newPhoto: string) => {
-    if (!user) return;
-    const updatedUser = { ...user, photo: newPhoto };
-    setUser(updatedUser);
+    if (user) {
+      const updatedUser = { ...user, photo: newPhoto };
+      setUser(updatedUser); 
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, updatePhoto }}>
+    <AuthContext.Provider value={{ user, setUser, updatePhoto, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

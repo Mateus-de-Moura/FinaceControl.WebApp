@@ -18,22 +18,10 @@ import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
 import 'jquery-mask-plugin';
 
-
-
-// interface RevenuesProps {
-//     Id: string;
-//     Active: boolean;
-//     Description: string;
-//     Value: string;
-//     Date: string;
-//     CategoryId: string;
-// }
-
 interface Category {
     id: string;
     name: string
 }
-
 
 function Create() {
     const rolesQuery = useQuery({ queryKey: ['category'], queryFn: GetCategories });
@@ -66,14 +54,18 @@ function Create() {
 
     const { register, handleSubmit, setValue, formState: { errors } } = useForm<ValidationSchema>({
         resolver: zodResolver(validationSchema),
+        defaultValues: {
+            Active: true,
+            Recurrent: false,
+        }
     });
 
     const onSubmit = async (data: any) => {
-        const {  ...rest } = data; 
-  
+        const { ...rest } = data;
+
 
         mutation.mutate({
-            ...rest,         
+            ...rest,
         });
     };
 
@@ -99,11 +91,21 @@ function Create() {
                     <form className="flex h-full flex-col gap-5 " onSubmit={handleSubmit(onSubmit, onError)}>
 
                         <div className="flex gap-4">
-                            <div className='card '>
-                                <div className="w-[5%] flex items-center gap-2">
-                                    <input {...register('Active')} type='checkbox'  checked />
-                                    <p>{errors.Active?.message}</p>
-                                    <label className='font-semibold'>Ativo</label>
+                            <div className="w-[50%]">
+                                <div className='card '>
+                                    <div className="w-[5%] flex items-center gap-2">
+                                        <input {...register('Active')} type='checkbox' />
+                                        <p>{errors.Active?.message}</p>
+                                        <label className='font-semibold'>Ativo</label>
+                                    </div>
+                                </div>
+
+                                <div className='card '>
+                                    <div className="w-[35%] flex items-center gap-2">
+                                        <input {...register('Recurrent')} type='checkbox' />
+                                        <p>{errors.Active?.message}</p>
+                                        <label className='font-semibold'>Receita Recorrente ? </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -11,8 +11,14 @@ export const GetRevenues = async (search: string, page: number) => {
 }
 
 export function CreateRevenues(revenues: any) {
+  return Api.post('/api/Revenues', revenues);
+}
+export function UpdateRevenues(revenues: any) {
+  return Api.put('/api/Revenues', revenues);
+}
 
-   return Api.post('/api/Revenues',revenues);
+export function GetById(id: string) {
+  return Api.get(`/api/Revenues/update/${id}`)
 }
 
 
