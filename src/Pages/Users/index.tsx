@@ -115,9 +115,7 @@ function index() {
                 <h6 className="font-semibold">Gerenciamento de Usuários</h6>
                 <Link to="/Users/Create" className={buttonVariants({ variant: "default", size: "sm" })}>Cadastrar novo Usuário</Link>
             </div>
-            <Card className="p-5 bg-white h-screen">
-
-
+            <Card className="p-5 bg-white h-[620px]">
                 <div className='w-full flex justify-end gap-2'>
                     <div className='w-72 self-end '>
                         <Input

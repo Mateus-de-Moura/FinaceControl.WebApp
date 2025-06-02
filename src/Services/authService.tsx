@@ -19,18 +19,16 @@ export interface responseInfo {
 interface LoginUserCommand {
   email: string;
   password: string;
-  latitude: string;
-  longitude: string;
+  latitude?: string;
+  longitude?: string;
 }
 
 export const fetchAuthUser = async (email: string, password: string) => {
-  const { latitude, longitude } = await getGeolocation();
+  // const { latitude, longitude } = await getGeolocation();
 
   const loginData: LoginUserCommand = {
     email,
-    password,
-    latitude,
-    longitude,
+    password,  
   };
 
   const response = await Api.post<AuthUser>("/Auth/Login", loginData);
@@ -47,23 +45,23 @@ export const fetchAuthUser = async (email: string, password: string) => {
   return response.data;
 };
 
-const getGeolocation = (): Promise<{ latitude: string; longitude: string }> => {
-  return new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        resolve({
-          latitude: position.coords.latitude.toString(),
-          longitude: position.coords.longitude.toString()
-        });
-      },
-      (error) => {
-        reject("Erro ao obter localização: " + error.message);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
-      }
-    );
-  });
-};
+// const getGeolocation = (): Promise<{ latitude: string; longitude: string }> => {
+//   return new Promise((resolve, reject) => {
+//     navigator.geolocation.getCurrentPosition(
+//       (position) => {
+//         resolve({
+//           latitude: position.coords.latitude.toString(),
+//           longitude: position.coords.longitude.toString()
+//         });
+//       },
+//       (error) => {
+//         reject("Erro ao obter localização: " + error.message);
+//       },
+//       {
+//         enableHighAccuracy: true,
+//         timeout: 10000,
+//         maximumAge: 0
+//       }
+//     );
+//   });
+// };

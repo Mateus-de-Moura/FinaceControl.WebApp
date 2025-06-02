@@ -2,8 +2,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Info } from "lucide-react";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { Label } from "@/components/ui/label";
-function LoginLocationData() {
 
+function LoginLocationData() {
     const mapContainerStyle = {
         width: "90%",
         height: "150px",
@@ -21,8 +21,9 @@ function LoginLocationData() {
                     <AccordionItem value="item-1">
                         <AccordionTrigger deviceType="monitor" status="success" />
                         <AccordionContent>
-                            <div className="mt-5 flex gap-3">
-                                <div className="w-[18%]">
+                            <div className="mt-5 flex flex-wrap gap-3">
+                                {/* Localização */}
+                                <div className="w-full sm:w-[18%] lg:w-[18%]">
                                     <p className="font-semibold text-xl">Localização</p>
                                     <div className="flex items-center">
                                         <p>São Paulo, BR</p>
@@ -41,24 +42,26 @@ function LoginLocationData() {
                                     <div style={mapContainerStyle} className="bg-gray-100"></div>
                                 </div>
 
-                                <div className=" text-start w-[40%]">
+                                {/* Sistema Operacional e IP */}
+                                <div className="w-full sm:w-[40%] lg:w-[40%]">
                                     <div>
                                         <Label className="text-xl font-semibold">Sistema Operacional</Label>
-                                        <p className="text-gray-500 mt-1">Windows10</p>
+                                        <p className="text-gray-500 mt-1">Windows 10</p>
                                     </div>
 
                                     <div className="mt-5">
-                                        <Label className="text-xl font-semibold ">IP</Label>
+                                        <Label className="text-xl font-semibold">IP</Label>
                                         <p className="text-gray-500 mt-1">2804:58e8:8002:6500:91af:7c06:54f8:23b1</p>
                                     </div>
 
                                     <div className="mt-5">
-                                        <Label className="text-xl font-semibold ">Conta</Label>
+                                        <Label className="text-xl font-semibold">Conta</Label>
                                         <p className="text-gray-500 mt-1">teste@teste.com</p>
                                     </div>
-
                                 </div>
-                                <div className=" text-start w-[40%]">
+
+                                {/* Navegador */}
+                                <div className="w-full sm:w-[40%] lg:w-[40%]">
                                     <div>
                                         <Label className="text-xl font-semibold">Navegador</Label>
                                         <p className="text-gray-500 mt-1">Google Chrome</p>
@@ -70,11 +73,12 @@ function LoginLocationData() {
                 </Accordion>
 
                 <Accordion type="single" collapsible>
-                    <AccordionItem value="item-1">
+                    <AccordionItem value="item-2">
                         <AccordionTrigger deviceType="monitor" status="success" />
                         <AccordionContent>
-                            <div className="mt-5 flex gap-3">
-                                <div className="w-[18%]">
+                            <div className="mt-5 flex flex-wrap gap-3">
+                                {/* Localização */}
+                                <div className="w-full sm:w-[18%] lg:w-[18%]">
                                     <p className="font-semibold text-xl">Localização</p>
                                     <div className="flex items-center">
                                         <p>São Paulo, BR</p>
@@ -93,24 +97,26 @@ function LoginLocationData() {
                                     <div style={mapContainerStyle} className="bg-gray-100"></div>
                                 </div>
 
-                                <div className=" text-start w-[40%]">
+                                {/* Sistema Operacional e IP */}
+                                <div className="w-full sm:w-[40%] lg:w-[40%]">
                                     <div>
                                         <Label className="text-xl font-semibold">Sistema Operacional</Label>
-                                        <p className="text-gray-500 mt-1">Windows10</p>
+                                        <p className="text-gray-500 mt-1">Windows 10</p>
                                     </div>
 
                                     <div className="mt-5">
-                                        <Label className="text-xl font-semibold ">IP</Label>
+                                        <Label className="text-xl font-semibold">IP</Label>
                                         <p className="text-gray-500 mt-1">2804:58e8:8002:6500:91af:7c06:54f8:23b1</p>
                                     </div>
 
                                     <div className="mt-5">
-                                        <Label className="text-xl font-semibold ">Conta</Label>
+                                        <Label className="text-xl font-semibold">Conta</Label>
                                         <p className="text-gray-500 mt-1">teste@teste.com</p>
                                     </div>
-
                                 </div>
-                                <div className=" text-start w-[40%]">
+
+                                {/* Navegador */}
+                                <div className="w-full sm:w-[40%] lg:w-[40%]">
                                     <div>
                                         <Label className="text-xl font-semibold">Navegador</Label>
                                         <p className="text-gray-500 mt-1">Google Chrome</p>

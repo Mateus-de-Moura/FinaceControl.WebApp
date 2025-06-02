@@ -1,8 +1,10 @@
 import axios from 'axios'
 import { AuthUser } from "@/Services/authService"
+const apiUrl = import.meta.env.VITE_API_URL;
+
 
 const Api = axios.create({
-  baseURL: "https://localhost:7113/",
+  baseURL: apiUrl,
   timeout: 5000,
 })
 
