@@ -10,12 +10,13 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
-
-
 import data from './data.json'
 import { Card, CardContent, CardTitle } from "@/components/ui/card"
 
+
 export default function Page() {
+
+ 
 
     return (
         <div className="flex flex-1 flex-col ">

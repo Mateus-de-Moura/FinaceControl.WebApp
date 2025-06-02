@@ -13,6 +13,7 @@ import Update from "@/Pages/Users/Update";
 import Revenues from '@/Pages/Revenues/index'
 import RevenuesCreate from '../Pages/Revenues/Create'
 import RevenuesUpdate from '../Pages/Revenues/Update'
+import Notify from "@/Pages/Notify/Notify";
 
 interface LayoutWithSidebarProps {
   children: ReactNode;
@@ -91,8 +92,16 @@ function index() {
             <Account />
           </LayoutWithSidebar>
         </PrivateRoute>} />
-    </Routes>
 
+      <Route path="/Notificações" element={
+        <PrivateRoute>
+          <LayoutWithSidebar>
+            <Notify />
+          </LayoutWithSidebar>
+        </PrivateRoute>} />
+
+
+    </Routes>
   )
 }
 

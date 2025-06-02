@@ -49,10 +49,11 @@ export function NavUser({
   var photo = `data:image/png;base64,${data.photo}`;
 
   function logout() {
-    localStorage.removeItem('Logado');
-    localStorage.removeItem('token');
-    navigate("/")
+    localStorage.removeItem('loginData');
+    window.location.reload();
   }
+
+  const unreadNotifications = 15;
 
   return (
     <SidebarMenu>
@@ -64,13 +65,13 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg ">
-                <AvatarImage src={photo} alt={user.name}   className="h-full w-full object-cover" />
+                <AvatarImage src={photo} alt={user.name} className="h-full w-full object-cover" />
                 <AvatarFallback className="rounded-lg text-blue-600 font-semibold">{data.username.substring(0, 1)}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{data.username}</span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {data.username}
+                  {data.email}
                 </span>
               </div>
               <MoreVerticalIcon className="ml-auto size-4" />
@@ -85,7 +86,7 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={photo} alt={user.name}  className="h-full w-full object-cover"  />
+                  <AvatarImage src={photo} alt={user.name} className="h-full w-full object-cover" />
                   <AvatarFallback className="rounded-lg text-blue-600 font-semibold">{data.username.substring(0, 1)}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -106,10 +107,18 @@ export function NavUser({
                 <CreditCardIcon />
                 Billing
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <BellIcon />
-                Notifications
+              <DropdownMenuItem onClick={() => navigate("/Notificações")} className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <BellIcon />
+                  Notifications
+                </div>
+                {unreadNotifications > 0 && (
+                  <span className="ml-2 inline-flex items-center justify-center rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
+                    {unreadNotifications}
+                  </span>
+                )}
               </DropdownMenuItem>
+
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => logout()}>

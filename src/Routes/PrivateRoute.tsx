@@ -6,7 +6,7 @@ interface PrivateRouteProps {
 }
 
 export function PrivateRoute({ children }: PrivateRouteProps) {
-  const user = localStorage.getItem('Logado');
+  const user = localStorage.getItem('loginData');
 
   return user ? children : <Navigate to="/" />;
 }
