@@ -1,6 +1,5 @@
 "use client"
 import { SectionCards } from "@/components/ui/section-cards"
-import { TrendingUp } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 import { GetDashboard } from "@/Services/dashboardServices";
 import { useQuery } from '@tanstack/react-query';;
@@ -8,7 +7,6 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
