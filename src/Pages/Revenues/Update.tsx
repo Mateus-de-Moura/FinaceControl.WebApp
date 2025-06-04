@@ -33,8 +33,6 @@ function Update() {
     const response = useQuery({ queryKey: ['revenues'], queryFn: () => GetById(id as string) });
     const revenue = response.data?.data;
 
-    console.log(revenue)
-
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 

@@ -30,6 +30,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { useNotification } from '@/hooks/useNotification';
+import { toast } from 'react-toastify';
+
 
 export function NavUser({
   user,
@@ -47,6 +50,10 @@ export function NavUser({
   var data = JSON.parse(storedData!) as AuthUser;
 
   var photo = `data:image/png;base64,${data.photo}`;
+
+  useNotification(data.id, (msg: string) => {
+    toast.info(`🔔 ${msg}`);
+  });
 
   function logout() {
     localStorage.removeItem('loginData');

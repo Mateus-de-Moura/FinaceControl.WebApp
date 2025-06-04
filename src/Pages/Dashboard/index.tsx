@@ -2,7 +2,7 @@
 import { SectionCards } from "@/components/ui/section-cards"
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 import { GetDashboard } from "@/Services/dashboardServices";
-import { useQuery } from '@tanstack/react-query';;
+import { useQuery } from '@tanstack/react-query';
 import {
     Card,
     CardContent,

@@ -26,10 +26,8 @@ function Signin() {
     navigate('/home');
   };
 
-  const handleLoginError = (error: any) => {
-    console.log(error)
-    const responseInfo = error?.response?.data; 
-          console.log(responseInfo)
+  const handleLoginError = (error: any) => { 
+    const responseInfo = error?.response?.data;    
     if (responseInfo?.httpStatus === 404) {
       setEmailInvalid(true);
     }
