@@ -1,11 +1,17 @@
 // src/services/signalRService.ts
 import * as signalR from '@microsoft/signalr';
 
+//Prod
+//const API_Signal = "http://192.168.18.5:8080/notifyHub"
+
+//Hmlg
+const API_Signal = "https://localhost:7113/notifyHub"
+
 let connection: signalR.HubConnection;
 
 export function startSignalRConnection(userId: string, onMessage: (msg: string) => void) {
   connection = new signalR.HubConnectionBuilder()
-    .withUrl("https://localhost:7113/notifyHub") 
+    .withUrl(API_Signal) 
     .withAutomaticReconnect()
     .build();
 

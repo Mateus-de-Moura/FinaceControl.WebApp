@@ -1,5 +1,4 @@
 "use client"
-
 import { useNavigate } from "react-router"
 import { AuthUser } from "@/Services/authService"
 import {
@@ -32,6 +31,8 @@ import {
 } from "@/components/ui/sidebar"
 import { useNotification } from '@/hooks/useNotification';
 import { toast } from 'react-toastify';
+import { useQuery } from '@tanstack/react-query';
+import { GetNotificationDoesNotRead } from "@/Services/NotifyService"
 
 
 export function NavUser({
@@ -46,6 +47,16 @@ export function NavUser({
   const { isMobile } = useSidebar()
   const navigate = useNavigate()
 
+  const notificationQuery = useQuery({
+    queryKey: ['notification'],
+    queryFn: GetNotificationDoesNotRead,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    retry: false,
+  });
+
+  const totoalNotification = notificationQuery.data?.data;
+
   const storedData = localStorage.getItem('loginData');
   var data = JSON.parse(storedData!) as AuthUser;
 
@@ -53,6 +64,7 @@ export function NavUser({
 
   useNotification(data.id, (msg: string) => {
     toast.info(`🔔 ${msg}`);
+    notificationQuery.refetch();
   });
 
   function logout() {
@@ -60,7 +72,7 @@ export function NavUser({
     window.location.reload();
   }
 
-  const unreadNotifications = 15;
+  const unreadNotifications = totoalNotification;
 
   return (
     <SidebarMenu>
