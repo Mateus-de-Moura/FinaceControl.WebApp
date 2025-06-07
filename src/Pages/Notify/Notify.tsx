@@ -3,12 +3,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
 import { Button } from '@/components/ui/button';
-import { useQuery } from '@tanstack/react-query';
-import { GetNotify } from '@/Services/NotifyService';
+import { GetNotify, UpdateNotificatioForRead } from '@/Services/NotifyService';
 import { Notifications } from '@/common/Interfaces/Notify.d';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
+import { useMemo } from 'react';
 
 
 function Notify() {
+    const successToastId = useMemo(() => 'successToastId', []);
+
     const notifyQuery = useQuery({
         queryKey: ['notify'],
         queryFn: GetNotify,
@@ -18,7 +22,25 @@ function Notify() {
     });
     const notify: Notifications[] = notifyQuery.data?.data;
 
-    console.log(notify)
+    const updateNotificationMutation = useMutation({
+        mutationFn: UpdateNotificatioForRead,
+        onSuccess: () => {        
+            toast('Notificacao marcada como lida !', {
+                toastId: successToastId,
+                type: 'success',
+                 autoClose: 800,
+                onClose:  () => {
+                    window.location.reload();
+                }
+            });
+        }
+    });
+
+    function handleUpdate(Id: string, wasRead: boolean) {
+        if (!wasRead) {
+            updateNotificationMutation.mutate(Id);
+        }
+    }
 
     return (
         <div className="p-5">
@@ -33,8 +55,9 @@ function Notify() {
                         notify.map((notification: Notifications) => {
                             return (
                                 <div
+                                    onClick={() => handleUpdate(notification.id, notification.wasRead)}
                                     key={notification.id}
-                                    className={`rounded-md border p-4 mb-3 shadow-sm transition-all duration-300 hover:shadow-md ${notification.wasRead ? "bg-gray-50 text-gray-600" : "bg-white text-gray-900"
+                                    className={`rounded-md border p-4 mb-3 shadow-sm transition-all duration-300 hover:shadow-md ${notification.wasRead ? "bg-gray-100 text-gray-500" : "bg-white text-gray-900"
                                         }`}
                                 >
                                     <div className="flex justify-between items-start">
@@ -43,10 +66,10 @@ function Notify() {
                                                 Prioridade:{" "}
                                                 <span
                                                     className={`font-semibold ${notification.priority === "high"
-                                                            ? "text-red-600"
-                                                            : notification.priority === "medium"
-                                                                ? "text-yellow-600"
-                                                                : "text-green-600"
+                                                        ? "text-red-600"
+                                                        : notification.priority === "medium"
+                                                            ? "text-yellow-600"
+                                                            : "text-green-600"
                                                         }`}
                                                 >
                                                     {notification.priority}
@@ -68,7 +91,7 @@ function Notify() {
                                                 </p>
                                             )}
 
-                                            {notification.readDate && (
+                                            {notification.wasRead && notification.readDate && (
                                                 <p className="text-xs text-muted-foreground">
                                                     Lida em: {new Date(notification.readDate).toLocaleString("pt-BR")}
                                                 </p>
@@ -91,7 +114,7 @@ function Notify() {
                     }
                 </div>
 
-                <div className="w-[50%]  rounded-md border p-4 mb-3 shadow-sm transition-all duration-300 hover:shadow-md p-5">
+                <div className="w-[50%] h-full  rounded-md border  mb-3 shadow-sm transition-all duration-300 hover:shadow-md p-5">
                     <div className="flex items-center gap-2 mb-8">
                         <Filter />
                         <p className='font-semibold'>Filtros</p>
