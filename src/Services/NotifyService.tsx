@@ -1,7 +1,7 @@
 import Api from "@/Api";
 
-export function GetNotify() {
-    return Api.get("/api/Notify");
+export function GetNotify(statusFilter: string) {
+    return Api.get(`/api/Notify?wasRead=${statusFilter}`);
 }
 
 export function GetNotificationDoesNotRead() {

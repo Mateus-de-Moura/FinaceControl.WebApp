@@ -6,16 +6,18 @@ import { Button } from '@/components/ui/button';
 import { GetNotify, UpdateNotificatioForRead } from '@/Services/NotifyService';
 import { Notifications } from '@/common/Interfaces/Notify.d';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
-import { useMemo } from 'react';
-
+import { useState } from 'react';
+import { Modal } from '@/components/ModalNotification';
 
 function Notify() {
-    const successToastId = useMemo(() => 'successToastId', []);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedNotification, setSelectedNotification] = useState<Notifications | null>(null);
+    const [statusFilter, setStatusFilter] = useState<string>("");
+    const [triggerRefetch, setTriggerRefetch] = useState(true);
 
     const notifyQuery = useQuery({
-        queryKey: ['notify'],
-        queryFn: GetNotify,
+        queryKey: ['notify', triggerRefetch],
+        queryFn: () => GetNotify(statusFilter),
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
         retry: false,
@@ -24,15 +26,8 @@ function Notify() {
 
     const updateNotificationMutation = useMutation({
         mutationFn: UpdateNotificatioForRead,
-        onSuccess: () => {        
-            toast('Notificacao marcada como lida !', {
-                toastId: successToastId,
-                type: 'success',
-                 autoClose: 800,
-                onClose:  () => {
-                    window.location.reload();
-                }
-            });
+        onSuccess: () => {
+            window.location.reload();
         }
     });
 
@@ -42,6 +37,26 @@ function Notify() {
         }
     }
 
+    function openModal(notification: Notifications) {
+        setSelectedNotification(notification);
+        setIsModalOpen(true);
+    }
+
+    function closeModal() {
+        setIsModalOpen(false);
+        if (selectedNotification && !selectedNotification.wasRead) {
+            handleUpdate(selectedNotification.id, selectedNotification.wasRead);
+        }
+    }
+    function handleTrigger() {
+        setTriggerRefetch(!triggerRefetch);
+    }
+
+    function handleClearFilters() {
+        setStatusFilter("")
+        setTriggerRefetch(!triggerRefetch);
+    }
+
     return (
         <div className="p-5">
             <div className="">
@@ -49,13 +64,12 @@ function Notify() {
             </div>
 
             <div className="flex w-full mt-5 gap-3">
-
                 <div className="w-[50%] gap-2">
                     {notify &&
                         notify.map((notification: Notifications) => {
                             return (
                                 <div
-                                    onClick={() => handleUpdate(notification.id, notification.wasRead)}
+                                    onClick={() => openModal(notification)} // Abre o modal ao clicar
                                     key={notification.id}
                                     className={`rounded-md border p-4 mb-3 shadow-sm transition-all duration-300 hover:shadow-md ${notification.wasRead ? "bg-gray-100 text-gray-500" : "bg-white text-gray-900"
                                         }`}
@@ -65,10 +79,10 @@ function Notify() {
                                             <p className="font-medium text-sm text-muted-foreground">
                                                 Prioridade:{" "}
                                                 <span
-                                                    className={`font-semibold ${notification.priority === "high"
+                                                    className={`font-semibold ${notification.priority === "Alta"
                                                         ? "text-red-600"
-                                                        : notification.priority === "medium"
-                                                            ? "text-yellow-600"
+                                                        : notification.priority === "Média"
+                                                            ? "text-yellow-400"
                                                             : "text-green-600"
                                                         }`}
                                                 >
@@ -97,20 +111,10 @@ function Notify() {
                                                 </p>
                                             )}
                                         </div>
-
-                                        {!notification.wasRead && (
-                                            <div
-                                                className="bg-red-500 w-2 h-2 rounded-full mt-1"
-                                                title="Nova"
-                                            />
-                                        )}
                                     </div>
                                 </div>
                             );
-
-
                         })
-
                     }
                 </div>
 
@@ -135,23 +139,29 @@ function Notify() {
                             </TooltipProvider>
                         </div>
 
-                        <Select defaultValue="0"  >
+                        <Select defaultValue="0" value={statusFilter} onValueChange={(value) => setStatusFilter(value)} >
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Theme" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem key="0" value="0" disabled>Selecione </SelectItem >
+                                <SelectItem key="0" value="0" disabled>Selecione um status </SelectItem >
+                                <SelectItem key="1" value="read" >Lidas </SelectItem >
+                                <SelectItem key="2" value="notRead" >Não Lidas </SelectItem >
                             </SelectContent>
                         </Select>
 
                         <div className='flex items-end justify-end w-full'>
-                            <Button className='mt-5' variant='secondary' size='sm'>Filtrar</Button>
+                            <Button onClick={() => handleTrigger()} className='mt-5 mr-5' variant='secondary' size='sm'>Filtrar</Button>
+                            <Button onClick={() => handleClearFilters()} className='mt-5' variant='outline' size='sm'>Limpar Filtros</Button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {/* Modal */}
+            <Modal isOpen={isModalOpen} onClose={closeModal} notification={selectedNotification} />
         </div>
     )
 }
 
-export default Notify
+export default Notify;
