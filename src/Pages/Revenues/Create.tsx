@@ -16,7 +16,7 @@ import { CreateRevenues } from '@/Services/RevenuesService';
 import { GetCategories } from '@/Services/CategoryService';
 import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
-import 'jquery-mask-plugin';
+import { NumericFormat } from 'react-number-format';
 
 interface Category {
     id: string;
@@ -151,11 +151,16 @@ function Create() {
 
                             <div className="w-[24%] gap-1">
                                 <label className='mb-1 font-semibold'>Valor *</label>
-                                <Input
-                                    {...register('Value', { required: 'Valor é obrigatório' })}
-                                    type="text"
-                                    className="money-mask"
+                                <NumericFormat                                    
+                                    thousandSeparator="."
+                                    decimalSeparator=","                                  
+                                    decimalScale={2}
+                                    fixedDecimalScale
+                                    customInput={Input}
+                                    allowNegative={false}
+                                    {...register('Value')}
                                 />
+
                                 <p className='text-red-500'>{errors.Value?.message}</p>
                             </div>
                         </div>
