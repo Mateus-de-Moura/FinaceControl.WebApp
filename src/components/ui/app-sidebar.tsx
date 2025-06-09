@@ -27,7 +27,7 @@ const navItems = [
   { title: "Home", url: "/home", icon: LayoutDashboardIcon },
   { title: "Usuários", url: "/Users", icon: UsersIcon },
   { title: "Receitas", url: "/Receitas", icon: ChartNoAxesCombined },
-  { title: "Projects", url: "/projects", icon: FolderIcon },
+  { title: "Despesas", url: "/Despesas", icon: FolderIcon },
   { title: "Team", url: "/team", icon: UsersIcon },
 ]
 
