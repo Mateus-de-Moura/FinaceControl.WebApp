@@ -1,4 +1,4 @@
-export type PriorityLevel = "low" | "medium" | "high";
+export type PriorityLevel = "Baixa" | "Média" | "Alta";
 
 export interface Expense {
     id: string;

@@ -20,6 +20,7 @@ import 'jquery-mask-plugin';
 import { useParams } from "react-router-dom";
 import { useEffect } from 'react';
 import { UpdateRevenues } from '@/Services/RevenuesService';
+import { NumericFormat } from 'react-number-format';
 
 interface Category {
     id: string;
@@ -60,7 +61,7 @@ function Update() {
         }
     })
 
-    const { register, watch, handleSubmit, setValue, formState: { errors } } = useForm<ValidationSchemaUpdate>({
+    const { register, watch, handleSubmit, setValue, getValues, formState: { errors } } = useForm<ValidationSchemaUpdate>({
         resolver: zodResolver(validationSchemaUpdate),
         defaultValues: {
             Active: true,
@@ -94,7 +95,7 @@ function Update() {
             const formattedDate = date.toISOString().split('T')[0];
             setValue('Date', formattedDate);
 
-            setValue('Value', String(revenue.value));
+            setValue('Value', revenue.value);
         }
     }, [revenue, setValue]);
 
@@ -172,10 +173,17 @@ function Update() {
 
                             <div className="w-[24%] gap-1">
                                 <label className='mb-1 font-semibold'>Valor *</label>
-                                <Input
-                                    {...register('Value', { required: 'Valor é obrigatório' })}
-                                    type="text"
-                                    className="money-mask"
+                                <NumericFormat
+                                    thousandSeparator="."
+                                    decimalSeparator=","
+                                    decimalScale={2}
+                                    fixedDecimalScale
+                                    customInput={Input}
+                                    value={getValues('Value')}
+                                    allowNegative={false}
+                                    onValueChange={(values) => {
+                                        setValue('Value', String(values.value)); 
+                                    }}
                                 />
                                 <p className='text-red-500'>{errors.Value?.message}</p>
                             </div>
