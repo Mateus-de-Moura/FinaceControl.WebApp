@@ -27,8 +27,8 @@ function Signin() {
   };
 
   const handleLoginError = (error: any) => { 
-    const responseInfo = error?.response?.data;    
-    if (responseInfo?.httpStatus === 404) {
+    const responseInfo = error?.response?.data; 
+    if (responseInfo?.responseInfo.httpStatus === 404) {
       setEmailInvalid(true);
     }
   };

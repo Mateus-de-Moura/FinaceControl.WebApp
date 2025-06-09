@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import '../../Pages/Dashboard/style.css'
 import { GetDashboard } from "@/Services/dashboardServices";
 import { useQuery } from '@tanstack/react-query';;
 
