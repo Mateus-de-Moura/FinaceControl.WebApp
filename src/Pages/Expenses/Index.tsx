@@ -28,7 +28,7 @@ interface UsersTableProps {
   Id: string;
   Description: string;
   value: string;
-  DueDate: Date; 
+  DueDate: Date;
   CategoryName: string;
   StatusName: string;
 }
@@ -43,8 +43,8 @@ function Index() {
     queryKey: ["expense", search, page, selectStatus],
     queryFn: () => GetExpense(search, page, selectStatus),
     refetchOnWindowFocus: false,
-        refetchOnReconnect: false,
-        retry: false,
+    refetchOnReconnect: false,
+    retry: false,
   });
 
   const currentPage = page;
@@ -57,7 +57,6 @@ function Index() {
   };
 
   const data = usersQuery.data?.items || [];
-  console.log(data);
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   const usersColumns = useMemo<ColumnDef<UsersTableProps>[]>(
@@ -102,7 +101,7 @@ function Index() {
         accessorKey: "id",
         cell: (info) => {
           return (
-            <Link to={`/Expense/${info.getValue()}`}>
+            <Link to={`/Despesas/Update/${info.getValue()}`}>
               <Edit size={16} />
             </Link>
           );
@@ -129,11 +128,14 @@ function Index() {
       <Card className="p-5 bg-white h-[620px]">
         <div className="w-full flex justify-end gap-2">
           <div className="w-48 self-end">
-            <Select onValueChange={(value) => setStatus(value)}>
+            <Select onValueChange={(value) => setStatus(value === "all" ? "" : value)}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder = "Selecione um status"/>
+                <SelectValue placeholder="Selecione um status" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem key="all" value="all">
+                  Todos
+                </SelectItem>
                 <SelectItem key="0" value="0">
                   Pendente
                 </SelectItem>
