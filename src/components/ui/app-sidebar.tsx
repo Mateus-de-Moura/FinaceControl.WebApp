@@ -6,8 +6,8 @@ import {
   ArrowUpCircleIcon,
   ChartNoAxesCombined,
   LayoutDashboardIcon, 
-  FolderIcon,
   UsersIcon,
+  BanknoteArrowDown,
 } from "lucide-react"
 
 import {
@@ -27,7 +27,7 @@ const navItems = [
   { title: "Home", url: "/home", icon: LayoutDashboardIcon },
   { title: "Usuários", url: "/Users", icon: UsersIcon },
   { title: "Receitas", url: "/Receitas", icon: ChartNoAxesCombined },
-  { title: "Despesas", url: "/Despesas", icon: FolderIcon },
+  { title: "Despesas", url: "/Despesas", icon: BanknoteArrowDown },
   { title: "Team", url: "/team", icon: UsersIcon },
 ]
 
