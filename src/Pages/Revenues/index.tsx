@@ -1,4 +1,4 @@
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Link } from "react-router"
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, } from "@/components/ui/pagination"
 import { useState } from "react"
@@ -25,14 +25,13 @@ interface UsersTableProps {
 function index() {
 
     const [page, setPage] = useState(1);
-    const [search, setSearch] = useState("");  
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [search, setSearch] = useState("");
+    const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
 
     const usersQuery = useQuery({
-        queryKey: ['revenues', search, page],
-        queryFn: () => GetRevenues(search, page),
+        queryKey: ['revenues', search, page, dateRange],
+        queryFn: () => GetRevenues(search, page, dateRange[0], dateRange[1]),
     });
-
 
     const currentPage = page;
     const totalPages = usersQuery.data?.totalPages || 1;
@@ -125,11 +124,11 @@ function index() {
             <Card className="p-5 bg-white h-[620px]">
                 <div className='w-full flex justify-end gap-2'>
                     <SearchWithDate
-                        onSearch={(searchText, date) => {
+                        onSearch={(searchText, startDate, endDate) => {
                             setSearch(searchText);
-                            setSelectedDate(date);
+                            setDateRange([startDate, endDate]);
                         }}
-                    />                  
+                    />
                 </div>
 
                 <div className="mt-3 mb-3 h-full">

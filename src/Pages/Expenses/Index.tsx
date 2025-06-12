@@ -23,6 +23,8 @@ import {
 import { Link } from "react-router";
 import { SearchWithDate } from "@/components/SearchWithDate"
 import {  buttonVariants } from "@/components/ui/button"
+import True from '../../assets/true.svg'
+import False from '../../assets/false.svg'
 
 interface UsersTableProps {
   Id: string;
@@ -62,6 +64,27 @@ function Index() {
 
   const usersColumns = useMemo<ColumnDef<UsersTableProps>[]>(
     () => [
+      {
+                header: 'Ativo',
+                accessorKey: 'active',
+                cell: info => {
+                    const IsActive = info.getValue();
+                    const iconStyle = {
+                        display: 'flex',
+                        alignItems: 'start',
+                        justifyContent: 'start',
+                        height: '100%',
+                    };
+
+                    return (
+                        <div style={iconStyle}>
+                            {IsActive ? <img src={True} alt="Ativo" /> : <img src={False} alt="Inativo" />}
+                        </div>)
+                },
+                meta: {
+                    className: "w-[100px] min-w-[100px] ",
+                }
+            },
       {
         header: "Descrição",
         accessorKey: "description",
@@ -114,6 +137,7 @@ function Index() {
     ],
     []
   );
+  console.log(data)
 
   return (
     <div className="p-5 ">

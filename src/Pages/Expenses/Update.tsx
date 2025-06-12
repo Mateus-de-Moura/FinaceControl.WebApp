@@ -21,7 +21,6 @@ import { GetById, UpdateExpense } from "@/Services/ExpenseService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 import { toast } from "react-toastify";
-import { NumericFormat } from "react-number-format";
 import "jquery-mask-plugin";
 
 interface Category {
@@ -74,15 +73,18 @@ function Update() {
     watch,
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors },
   } = useForm<ValidationSchemaExpenseUpdate>({
     resolver: zodResolver(validationSchemaExpenseUpdate),
     defaultValues: {
       Active: true,
       Recurrent: false,
+      Status: 0
     },
   });
+
+  const statusValue = watch("Status");
+  const statusString = statusValue !== undefined && statusValue !== null ? statusValue.toString() : "0";
 
   const onSubmit = async (data: any) => {
     const { ...rest } = data;
@@ -110,7 +112,7 @@ function Update() {
       const formattedDate = date.toISOString().split("T")[0];
       setValue("DueDate", formattedDate);
 
-      setValue("Value", expense.value);
+      setValue("Value", expense.value.toString());
     }
   }, [expense, setValue]);
 
@@ -211,24 +213,17 @@ function Update() {
 
               <div className="w-[24%] gap-1">
                 <label className="mb-1 font-semibold">Valor *</label>
-                <NumericFormat
-                  thousandSeparator="."
-                  decimalSeparator=","
-                  decimalScale={2}
-                  fixedDecimalScale
-                  customInput={Input}
-                  value={getValues("Value")}
-                  allowNegative={false}
-                  onValueChange={(values) => {
-                    setValue("Value", String(values.value));
-                  }}
+                <Input
+                  {...register('Value', { required: 'Valor é obrigatório' })}
+                  type="text"
+                  className="money-mask"
                 />
                 <p className="text-red-500">{errors.Value?.message}</p>
               </div>
               <div className="w-48">
                 <label className="font-semibold">Status </label>
                 <Select
-                  value={watch("Status")?.toString() ?? ""}
+                  value={statusString}
                   onValueChange={(value) => setValue("Status", parseInt(value))}
                 >
                   <SelectTrigger className="w-[180px]">

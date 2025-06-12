@@ -154,6 +154,28 @@ function Create() {
                                 />
                                 <p className='text-red-500'>{errors.Value?.message}</p>
                             </div>
+
+                            <div className="w-48">
+                                <label className="font-semibold">Status </label>
+                                <Select                                   
+                                    onValueChange={(value) => setValue("Status", parseInt(value))}
+                                >
+                                    <SelectTrigger className="w-[180px]">
+                                        <SelectValue placeholder="Selecione um status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem key="0" value="0">
+                                            Pendente
+                                        </SelectItem>
+                                        <SelectItem key="1" value="1">
+                                            Pago
+                                        </SelectItem>
+                                        <SelectItem key="2" value="2">
+                                            Vencido
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
 
                         <div className="w-[100%] mt-3 flex justify-between">
