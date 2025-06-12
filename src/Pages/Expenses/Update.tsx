@@ -171,7 +171,7 @@ function Update() {
               <div className="w-[50%]">
                 <label className="font-semibold">Categoria *</label>
                 <Select
-                  defaultValue="0"
+                  value={watch('CategoryId')}
                   {...register("CategoryId")}
                   onValueChange={(value) => setValue("CategoryId", value)}
                 >

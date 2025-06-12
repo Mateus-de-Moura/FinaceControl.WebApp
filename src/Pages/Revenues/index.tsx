@@ -10,9 +10,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import True from '../../assets/true.svg'
 import False from '../../assets/false.svg'
 import { Edit } from "react-feather";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react"
 import { Card } from "@/components/ui/card"
+import { SearchWithDate } from "@/components/SearchWithDate"
 
 interface UsersTableProps {
     Id: string;
@@ -26,8 +25,8 @@ interface UsersTableProps {
 function index() {
 
     const [page, setPage] = useState(1);
-    const [search, setSearch] = useState("");
-    const [inputUser, setInputUser] = useState("");
+    const [search, setSearch] = useState("");  
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
     const usersQuery = useQuery({
         queryKey: ['revenues', search, page],
@@ -125,19 +124,12 @@ function index() {
             </div>
             <Card className="p-5 bg-white h-[620px]">
                 <div className='w-full flex justify-end gap-2'>
-                    <div className='w-72 self-end '>
-                        <Input
-                            type='text'
-                            placeholder='Buscar'
-                            value={inputUser}
-                            onChange={e => setInputUser(e.target.value)}
-                            className='border rounded'
-                        />
-                    </div>
-                    <div className='self-end'>
-                        <Button className="h-9" size="sm" variant={"secondary"}
-                            onClick={() => setSearch(inputUser)}><Search /></Button>
-                    </div>
+                    <SearchWithDate
+                        onSearch={(searchText, date) => {
+                            setSearch(searchText);
+                            setSelectedDate(date);
+                        }}
+                    />                  
                 </div>
 
                 <div className="mt-3 mb-3 h-full">

@@ -83,6 +83,7 @@ function Update() {
     };
 
     useEffect(() => {
+        console.log(revenue)
         if (revenue) {
             setValue('Id', revenue.id);
             setValue('Active', revenue.active);
@@ -141,7 +142,7 @@ function Update() {
 
                             <div className='w-[50%]'>
                                 <label className='font-semibold'>Categoria *</label>
-                                <Select defaultValue="0" {...register('CategoryId')} onValueChange={(value) => setValue('CategoryId', value)} >
+                                <Select value={watch('CategoryId')} {...register('CategoryId')} onValueChange={(value) => setValue('CategoryId', value)} >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Theme" />
                                     </SelectTrigger>
