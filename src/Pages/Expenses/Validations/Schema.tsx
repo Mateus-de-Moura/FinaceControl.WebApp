@@ -27,6 +27,10 @@ export const validationSchema = z.object({
         required_error: "CategoryId is required",
         invalid_type_error: "CategoryId must be a string",
     }),
+    Status: z.number({
+        required_error: "Status is required",
+        invalid_type_error: "Status must be a number",
+    })
 });
 
 export type ValidationSchema = z.infer<typeof validationSchema>;

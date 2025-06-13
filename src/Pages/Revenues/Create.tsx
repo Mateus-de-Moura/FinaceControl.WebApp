@@ -144,23 +144,18 @@ function Create() {
                         <div className='flex gap-4'>
 
                             <div className="w-[24%]">
-                                <label className='font-semibold'>Vencimento *</label>
+                                <label className='font-semibold'>Data do recebimento *</label>
                                 <Input {...register('Date')} type='Date' placeholder='Nickname do usuário' />
                                 <p className='text-red-500'>{errors.Date?.message}</p>
                             </div>
 
                             <div className="w-[24%] gap-1">
                                 <label className='mb-1 font-semibold'>Valor *</label>
-                                <NumericFormat                                    
-                                    thousandSeparator="."
-                                    decimalSeparator=","                                  
-                                    decimalScale={2}
-                                    fixedDecimalScale
-                                    customInput={Input}
-                                    allowNegative={false}
-                                    {...register('Value')}
-                                />
-
+                                <Input
+                                    {...register('Value', { required: 'Valor é obrigatório' })}
+                                    type="text"
+                                    className="money-mask"
+                                />                   
                                 <p className='text-red-500'>{errors.Value?.message}</p>
                             </div>
                         </div>

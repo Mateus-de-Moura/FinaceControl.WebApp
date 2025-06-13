@@ -9,12 +9,10 @@ import {
 } from "@/components/ui/pagination";
 import { DataTable } from "@/components/ui/DataTable/data-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Search } from "react-feather";
+import { Edit } from "react-feather";
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { GetExpense } from "@/Services/ExpenseService";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -23,6 +21,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Link } from "react-router";
+import { SearchWithDate } from "@/components/SearchWithDate"
+import {  buttonVariants } from "@/components/ui/button"
+import True from '../../assets/true.svg'
+import False from '../../assets/false.svg'
 
 interface UsersTableProps {
   Id: string;
@@ -36,12 +38,13 @@ interface UsersTableProps {
 function Index() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [inputUser, setInputUser] = useState("");
   const [selectStatus, setStatus] = useState("");
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
 
   const usersQuery = useQuery({
-    queryKey: ["expense", search, page, selectStatus],
-    queryFn: () => GetExpense(search, page, selectStatus),
+    queryKey: ["expense", search, page, selectStatus, dateRange],
+    queryFn: () =>
+      GetExpense(search, page, selectStatus, dateRange[0], dateRange[1]),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     retry: false,
@@ -61,6 +64,27 @@ function Index() {
 
   const usersColumns = useMemo<ColumnDef<UsersTableProps>[]>(
     () => [
+      {
+                header: 'Ativo',
+                accessorKey: 'active',
+                cell: info => {
+                    const IsActive = info.getValue();
+                    const iconStyle = {
+                        display: 'flex',
+                        alignItems: 'start',
+                        justifyContent: 'start',
+                        height: '100%',
+                    };
+
+                    return (
+                        <div style={iconStyle}>
+                            {IsActive ? <img src={True} alt="Ativo" /> : <img src={False} alt="Inativo" />}
+                        </div>)
+                },
+                meta: {
+                    className: "w-[100px] min-w-[100px] ",
+                }
+            },
       {
         header: "Descrição",
         accessorKey: "description",
@@ -113,6 +137,7 @@ function Index() {
     ],
     []
   );
+  console.log(data)
 
   return (
     <div className="p-5 ">
@@ -148,25 +173,15 @@ function Index() {
               </SelectContent>
             </Select>
           </div>
-          <div className="w-72 self-end ">
-            <Input
-              type="text"
-              placeholder="Buscar"
-              value={inputUser}
-              onChange={(e) => setInputUser(e.target.value)}
-              className="border rounded"
+          <div>
+            <SearchWithDate
+              onSearch={(searchText, startDate, endDate) => {
+                setSearch(searchText);
+                setDateRange([startDate, endDate]);
+              }}
             />
           </div>
-          <div className="self-end">
-            <Button
-              className="h-9"
-              size="sm"
-              variant={"secondary"}
-              onClick={() => setSearch(inputUser)}
-            >
-              <Search />
-            </Button>
-          </div>
+
         </div>
 
         <div className="mt-3 mb-3 h-full">

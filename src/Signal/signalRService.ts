@@ -19,15 +19,14 @@ export function startSignalRConnection(userId: string, onMessage: (msg: string) 
 
   connection
     .start()
-    .then(() => {
-      console.log("✅ Conectado ao SignalR Hub");
+    .then(() => {      
       connection.invoke("RegisterUser", userId);
     })
-    .catch(err => console.error("❌ Erro ao conectar ao SignalR Hub", err));
+    .catch();
 }
 
 export function stopSignalRConnection() {
   if (connection) {
-    connection.stop().then(() => console.log("🔌 SignalR desconectado"));
+    connection.stop().then();
   }
 }

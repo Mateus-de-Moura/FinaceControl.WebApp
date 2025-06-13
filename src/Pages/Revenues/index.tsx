@@ -1,4 +1,4 @@
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Link } from "react-router"
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, } from "@/components/ui/pagination"
 import { useState } from "react"
@@ -10,9 +10,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import True from '../../assets/true.svg'
 import False from '../../assets/false.svg'
 import { Edit } from "react-feather";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react"
 import { Card } from "@/components/ui/card"
+import { SearchWithDate } from "@/components/SearchWithDate"
 
 interface UsersTableProps {
     Id: string;
@@ -27,13 +26,12 @@ function index() {
 
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
-    const [inputUser, setInputUser] = useState("");
+    const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
 
     const usersQuery = useQuery({
-        queryKey: ['revenues', search, page],
-        queryFn: () => GetRevenues(search, page),
+        queryKey: ['revenues', search, page, dateRange],
+        queryFn: () => GetRevenues(search, page, dateRange[0], dateRange[1]),
     });
-
 
     const currentPage = page;
     const totalPages = usersQuery.data?.totalPages || 1;
@@ -125,19 +123,12 @@ function index() {
             </div>
             <Card className="p-5 bg-white h-[620px]">
                 <div className='w-full flex justify-end gap-2'>
-                    <div className='w-72 self-end '>
-                        <Input
-                            type='text'
-                            placeholder='Buscar'
-                            value={inputUser}
-                            onChange={e => setInputUser(e.target.value)}
-                            className='border rounded'
-                        />
-                    </div>
-                    <div className='self-end'>
-                        <Button className="h-9" size="sm" variant={"secondary"}
-                            onClick={() => setSearch(inputUser)}><Search /></Button>
-                    </div>
+                    <SearchWithDate
+                        onSearch={(searchText, startDate, endDate) => {
+                            setSearch(searchText);
+                            setDateRange([startDate, endDate]);
+                        }}
+                    />
                 </div>
 
                 <div className="mt-3 mb-3 h-full">
