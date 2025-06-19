@@ -2,11 +2,26 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Info } from "lucide-react";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { Label } from "@/components/ui/label";
+import { useQuery } from '@tanstack/react-query';
+import { getLocation } from "@/Services/LoginLocationDataService";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { LatLngExpression } from 'leaflet';
+import "leaflet/dist/leaflet.css";
 
 function LoginLocationData() {
+    const locationsQuery = useQuery({
+        queryKey: ['locations'],
+        queryFn: getLocation,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        retry: false,
+    });
+    const locations = locationsQuery.data?.data;
+    console.log(locations)
+
     const mapContainerStyle = {
         width: "90%",
-        height: "150px",
+        height: "100%",
     };
 
     return (
@@ -17,115 +32,76 @@ function LoginLocationData() {
             </div>
 
             <div className="mt-5">
-                <Accordion type="single" collapsible>
-                    <AccordionItem value="item-1">
-                        <AccordionTrigger deviceType="monitor" status="success" />
-                        <AccordionContent>
-                            <div className="mt-5 flex flex-wrap gap-3">
-                                {/* Localização */}
-                                <div className="w-full sm:w-[18%] lg:w-[18%]">
-                                    <p className="font-semibold text-xl">Localização</p>
-                                    <div className="flex items-center">
-                                        <p>São Paulo, BR</p>
-                                        <Tooltip.Root>
-                                            <Tooltip.Trigger asChild>
-                                                <span className="ml-2 cursor-pointer">
-                                                    <Info size="18px" />
-                                                </span>
-                                            </Tooltip.Trigger>
-                                            <Tooltip.Content className="bg-white text-black border border-gray-300 rounded p-2 text-xs z-50">
-                                                As informações de localização são aproximadas do endereço IP e podem não corresponder à localização física exata deste logon.
-                                                <Tooltip.Arrow className="fill-white" />
-                                            </Tooltip.Content>
-                                        </Tooltip.Root>
-                                    </div>
-                                    <div style={mapContainerStyle} className="bg-gray-100"></div>
-                                </div>
 
-                                {/* Sistema Operacional e IP */}
-                                <div className="w-full sm:w-[40%] lg:w-[40%]">
-                                    <div>
-                                        <Label className="text-xl font-semibold">Sistema Operacional</Label>
-                                        <p className="text-gray-500 mt-1">Windows 10</p>
+                {locationsQuery.data?.data && locationsQuery.data.data.map((item: any) => (
+                    <Accordion type="single" collapsible>
+                        <AccordionItem value="item-1">
+                            <AccordionTrigger deviceType={item.platform} status="success" />
+                            <AccordionContent>
+                                <div className="mt-5 flex flex-wrap gap-3 mb-5">                                    
+                                    <div className="w-full sm:w-[20%] lg:w-[40%] mb-8">
+                                        <p className="font-semibold text-xl">Localização</p>
+                                        <div className="flex items-center">
+                                            <p>São Paulo, BR</p>
+                                            <Tooltip.Root>
+                                                <Tooltip.Trigger asChild>
+                                                    <span className="ml-2 cursor-pointer">
+                                                        <Info size="18px" />
+                                                    </span>
+                                                </Tooltip.Trigger>
+                                                <Tooltip.Content className="bg-white text-black border border-gray-300 rounded p-2 text-xs z-50">
+                                                    As informações de localização são aproximadas do endereço IP e podem não corresponder à localização física exata deste logon.
+                                                    <Tooltip.Arrow className="fill-white" />
+                                                </Tooltip.Content>
+                                            </Tooltip.Root>
+                                        </div>
+                                        <div style={mapContainerStyle} className="bg-gray-100">
+                                            <MapContainer
+                                                center={[item.latitude, item.longitude]}
+                                                zoom={13}
+                                                scrollWheelZoom={false}
+                                                style={{ width: "100%", height: "100%" }}
+                                            >
+                                                <TileLayer
+                                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                                />
+                                                <Marker position={[item.latitude, item.longitude]}>
+                                                    <Popup>Localização</Popup>
+                                                </Marker>
+                                            </MapContainer>
+                                        </div>
                                     </div>
+                          
+                                    <div className="w-full sm:w-[40%] lg:w-[40%]">
+                                        <div>
+                                            <Label className="text-xl font-semibold">Sistema Operacional</Label>
+                                            <p className="text-gray-500 mt-1">{item.os}</p>
+                                        </div>
 
-                                    <div className="mt-5">
-                                        <Label className="text-xl font-semibold">IP</Label>
-                                        <p className="text-gray-500 mt-1">2804:58e8:8002:6500:91af:7c06:54f8:23b1</p>
+                                        <div className="mt-5">
+                                            <Label className="text-xl font-semibold">IP</Label>
+                                            <p className="text-gray-500 mt-1">{item.ip}</p>
+                                        </div>
+
+                                        <div className="mt-5">
+                                            <Label className="text-xl font-semibold">Conta</Label>
+                                            <p className="text-gray-500 mt-1">{item.emailRequest}</p>
+                                        </div>
                                     </div>
-
-                                    <div className="mt-5">
-                                        <Label className="text-xl font-semibold">Conta</Label>
-                                        <p className="text-gray-500 mt-1">teste@teste.com</p>
-                                    </div>
-                                </div>
-
-                                {/* Navegador */}
-                                <div className="w-full sm:w-[40%] lg:w-[40%]">
-                                    <div>
-                                        <Label className="text-xl font-semibold">Navegador</Label>
-                                        <p className="text-gray-500 mt-1">Google Chrome</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
-
-                <Accordion type="single" collapsible>
-                    <AccordionItem value="item-2">
-                        <AccordionTrigger deviceType="monitor" status="success" />
-                        <AccordionContent>
-                            <div className="mt-5 flex flex-wrap gap-3">
-                                {/* Localização */}
-                                <div className="w-full sm:w-[18%] lg:w-[18%]">
-                                    <p className="font-semibold text-xl">Localização</p>
-                                    <div className="flex items-center">
-                                        <p>São Paulo, BR</p>
-                                        <Tooltip.Root>
-                                            <Tooltip.Trigger asChild>
-                                                <span className="ml-2 cursor-pointer">
-                                                    <Info size="18px" />
-                                                </span>
-                                            </Tooltip.Trigger>
-                                            <Tooltip.Content className="bg-white text-black border border-gray-300 rounded p-2 text-xs z-50">
-                                                As informações de localização são aproximadas do endereço IP e podem não corresponder à localização física exata deste logon.
-                                                <Tooltip.Arrow className="fill-white" />
-                                            </Tooltip.Content>
-                                        </Tooltip.Root>
-                                    </div>
-                                    <div style={mapContainerStyle} className="bg-gray-100"></div>
-                                </div>
-
-                                {/* Sistema Operacional e IP */}
-                                <div className="w-full sm:w-[40%] lg:w-[40%]">
-                                    <div>
-                                        <Label className="text-xl font-semibold">Sistema Operacional</Label>
-                                        <p className="text-gray-500 mt-1">Windows 10</p>
-                                    </div>
-
-                                    <div className="mt-5">
-                                        <Label className="text-xl font-semibold">IP</Label>
-                                        <p className="text-gray-500 mt-1">2804:58e8:8002:6500:91af:7c06:54f8:23b1</p>
-                                    </div>
-
-                                    <div className="mt-5">
-                                        <Label className="text-xl font-semibold">Conta</Label>
-                                        <p className="text-gray-500 mt-1">teste@teste.com</p>
+                                
+                                    <div className="w-full sm:w-[40%] lg:w-[15%]">
+                                        <div>
+                                            <Label className="text-xl font-semibold">Navegador</Label>
+                                            <p className="text-gray-500 mt-1">{item.browser}</p>
+                                        </div>
                                     </div>
                                 </div>
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
+                ))}
 
-                                {/* Navegador */}
-                                <div className="w-full sm:w-[40%] lg:w-[40%]">
-                                    <div>
-                                        <Label className="text-xl font-semibold">Navegador</Label>
-                                        <p className="text-gray-500 mt-1">Google Chrome</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
             </div>
         </div>
     );

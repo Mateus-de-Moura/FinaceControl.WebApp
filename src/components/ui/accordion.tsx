@@ -28,7 +28,7 @@ function AccordionTrigger({
   className,
   children,
   status = "success",
-  deviceType = "monitor",
+  deviceType = "Desktop",
   ...props
 }: React.ComponentProps<typeof AccordionPrimitive.Trigger> & { status?: string, deviceType?: string }) {
   return (
@@ -41,7 +41,7 @@ function AccordionTrigger({
         )}
         {...props}
       >
-        {deviceType === "monitor" ? <Monitor className="size-5 " /> : <Smartphone className="size-5" />}
+        {deviceType === "Desktop" ? <Monitor className="size-5 " /> : <Smartphone className="size-5" />}
 
         <span className={status === "success" ? "text-green-500" : "text-red-500"}>
           {status === "success" ? "Entrada bem-sucedida" : "Entrada mal-sucedida"}
