@@ -37,7 +37,7 @@ export function Create(user: any) {
 export function UpdateUser(user: any) {
   console.log(user)
   const formData = new FormData();
-  
+
   formData.append('Id', user.Id);
   formData.append('Active', String(user.Active));
   formData.append('Name', user.Name || '');
@@ -77,4 +77,8 @@ export function updatePhoto(photo: File, email: string) {
       'Content-Type': 'multipart/form-data',
     },
   });
+}
+
+export function RecoveryPasswordService(password: string, NewPassword: string) {
+  return Api.put(`/api/User/RecoveryPassword?passWord=${password}&newPassword=${NewPassword}`);
 }

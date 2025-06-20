@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Overview from './Components/Overview';
 import SecurityInfos from './Components/SecurityInfos';
 import LoginLocationData from './Components/LoginLocationData';
+import RecoveryPassword from './Components/RecoveryPassword';
 
 const Account = () => {
 
@@ -30,7 +31,7 @@ const Account = () => {
             <section className='w-full h-full px-5 mb-5 mt-5'>
                 {activeView === 'overview' && <Overview onViewChange={setActiveView} />}
                 {activeView === 'security' && <SecurityInfos />}
-                {activeView === 'password' && <div>Senha</div>}
+                {activeView === 'password' && <RecoveryPassword/>}
                 {activeView === 'LoginLocationData' && <LoginLocationData />}
             </section>
         </div>

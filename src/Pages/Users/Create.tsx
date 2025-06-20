@@ -16,24 +16,10 @@ import { Create as CreateUser, GetAllRoles } from '@/Services/UsersService';
 import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
 
-
-// interface UsersProps {
-//     Id: string;
-//     Active: boolean;
-//     Name: string;
-//     Surname: string;
-//     UserName: string;
-//     Email: string;
-//     PassWord: string;
-//     ConfirmPassWord: string;    
-//     RoleId: string;
-// }
-
 interface role {
     id: string;
     name: string
 }
-
 
 function Create() {
     const rolesQuery = useQuery({ queryKey: ['roles'], queryFn: GetAllRoles });

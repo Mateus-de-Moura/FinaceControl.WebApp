@@ -1,4 +1,5 @@
 import Api from "@/Api";
+import {fetchLocationData} from './LoginLocationDataService'
 
 export interface AuthUser {
   id: string;
@@ -24,8 +25,6 @@ interface LoginUserCommand {
 }
 
 export const fetchAuthUser = async (email: string, password: string) => {
-  // const { latitude, longitude } = await getGeolocation();
-
   const loginData: LoginUserCommand = {
     email,
     password,  
@@ -39,27 +38,9 @@ export const fetchAuthUser = async (email: string, password: string) => {
   }
 
   localStorage.setItem('loginData', JSON.stringify(response.data));
+  await fetchLocationData(email);
  
   return response.data;
 };
 
-// const getGeolocation = (): Promise<{ latitude: string; longitude: string }> => {
-//   return new Promise((resolve, reject) => {
-//     navigator.geolocation.getCurrentPosition(
-//       (position) => {
-//         resolve({
-//           latitude: position.coords.latitude.toString(),
-//           longitude: position.coords.longitude.toString()
-//         });
-//       },
-//       (error) => {
-//         reject("Erro ao obter localização: " + error.message);
-//       },
-//       {
-//         enableHighAccuracy: true,
-//         timeout: 10000,
-//         maximumAge: 0
-//       }
-//     );
-//   });
-// };
+
