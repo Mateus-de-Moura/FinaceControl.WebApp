@@ -185,7 +185,7 @@ function Update() {
                       Selecione
                     </SelectItem>
                     {rolesQuery &&
-                      rolesQuery.data?.data?.map((role: Category) => {
+                      rolesQuery.data?.map((role: Category) => {
                         return (
                           <SelectItem key={role.id} value={role.id}>
                             {role.name}

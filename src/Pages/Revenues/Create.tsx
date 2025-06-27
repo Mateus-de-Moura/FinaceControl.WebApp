@@ -16,7 +16,6 @@ import { CreateRevenues } from '@/Services/RevenuesService';
 import { GetCategories } from '@/Services/CategoryService';
 import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
-import { NumericFormat } from 'react-number-format';
 
 interface Category {
     id: string;
@@ -26,6 +25,7 @@ interface Category {
 function Create() {
     const rolesQuery = useQuery({ queryKey: ['category'], queryFn: GetCategories });
 
+    console.log(rolesQuery)
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
@@ -126,7 +126,7 @@ function Create() {
                                     <SelectContent>
                                         <SelectItem key="0" value="0" disabled   >Selecione</SelectItem >
                                         {rolesQuery &&
-                                            rolesQuery.data?.data?.map((role: Category) => {
+                                            rolesQuery.data?.map((role: Category) => {
                                                 return (
                                                     <SelectItem key={role.id} value={role.id}>
                                                         {role.name}
