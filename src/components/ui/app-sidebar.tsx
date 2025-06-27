@@ -8,6 +8,7 @@ import {
   LayoutDashboardIcon, 
   UsersIcon,
   BanknoteArrowDown,
+  ChartBarStacked,
 } from "lucide-react"
 
 import {
@@ -28,6 +29,7 @@ const navItems = [
   { title: "Usuários", url: "/Users", icon: UsersIcon },
   { title: "Receitas", url: "/Receitas", icon: ChartNoAxesCombined },
   { title: "Despesas", url: "/Despesas", icon: BanknoteArrowDown },
+  { title: "Categorias", url: "/Categorias", icon: ChartBarStacked},
   { title: "Team", url: "/team", icon: UsersIcon },
 ]
 
