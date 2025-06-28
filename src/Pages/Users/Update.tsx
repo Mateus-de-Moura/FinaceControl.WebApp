@@ -41,8 +41,8 @@ const Update = () => {
     resolver: zodResolver(validationSchemaUpdate),
   });
 
-  useEffect(() => {
-    if (user) {
+  useEffect(() => {    
+    if (user) {   
       setValue('Id', user.id);
       setValue('Name', user.name);
       setValue('Surname', user.surname);
