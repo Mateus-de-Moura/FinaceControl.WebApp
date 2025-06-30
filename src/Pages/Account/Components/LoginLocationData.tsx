@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { useQuery } from '@tanstack/react-query';
 import { getLocation } from "@/Services/LoginLocationDataService";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { LatLngExpression } from 'leaflet';
 import "leaflet/dist/leaflet.css";
 
 function LoginLocationData() {
