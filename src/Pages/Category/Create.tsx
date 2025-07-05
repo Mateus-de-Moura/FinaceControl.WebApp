@@ -41,15 +41,14 @@ function Create() {
             resolver: zodResolver(validationSchema),
             defaultValues: {
                 Active: true,
+                Recurrent: false,
             }
         });
     
-        const onSubmit = async (data: any) => {
-            const { ...rest } = data;
-    
-    
+        const onSubmit = async (data: any) => {    
             mutation.mutate({
-                ...rest,
+                ...data,
+                Type: Number(data.Type),
             });
         };
     
@@ -79,21 +78,49 @@ return (
                                         <label className='font-semibold'>Ativo</label>
                                     </div>
                                 </div>
+
+                                <div className='card '>
+                                    <div className="w-[35%] flex items-center gap-2">
+                                        <input {...register('Recurrent')} type='checkbox' />
+                                        <p>{errors.Active?.message}</p>
+                                        <label className='font-semibold'>Categoria Recorrente ? </label>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
-                        <div className="flex gap-4">
+                        <div className="flex gap-10">
                                 <div className="w-[50%]">
                                     <label className='font-semibold'>Descrição *</label>
                                     <Input {...register('Name')} type='text' />
                                     <p className='text-red-500'>{errors.Name?.message}</p>
                                 </div>
 
-                                <div className='w-[50%]'>
-                                    <label className='font-semibold'>Tipo *</label>
-                                    <Input {...register('Type')} type='text' />
+                                <div className='w-[50%] flex flex-col items-left gap-2 mt-[-5px]'>
+                                        <label className='font-semibold'>Tipo *</label>
+                                   
+                                   <div className="flex items-right gap-6">
+                                        <label className="flex items-center gap-1 cursor-pointer">
+                                            <Input 
+                                            type="radio"
+                                            value="1"
+                                            {...register('Type')}
+                                            />
+                                            Despesa
+                                        </label>
+
+                                        <label className="flex items-center gap-1 cursor-pointer">
+                                            <input
+                                            type="radio"
+                                            value="2"
+                                            {...register("Type")}
+                                            />
+                                            Receita
+                                        </label>
+                                    </div>
                                     <p className='text-red-500'>{errors.Type?.message}</p>  
-                                 </div>
+                                </div>
                         </div>
 
                         <div className="w-[100%] mt-3 flex justify-between">

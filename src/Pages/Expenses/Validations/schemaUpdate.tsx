@@ -31,7 +31,9 @@ export const validationSchemaExpenseUpdate = z.object({
         required_error: "CategoryId is required",
         invalid_type_error: "CategoryId must be a string",
     }),
-    Status: z.number().optional()
+    Status: z.number().optional(),
+
+    ProofFile: z.any().optional(),
 });
 
 export type ValidationSchemaExpenseUpdate = z.infer<typeof validationSchemaExpenseUpdate>;

@@ -18,6 +18,7 @@ import ExpensesCreate from "@/Pages/Expenses/Create"
 import ExpensesUpdate from "@/Pages/Expenses/Update"
 import Category from "@/Pages/Category/Index"
 import CategoryCreate from "@/Pages/Category/Create"
+import CategoryUpdate from "@/Pages/Category/Update"
 import Notify from "@/Pages/Notify/Notify";
 
 interface LayoutWithSidebarProps {
@@ -124,7 +125,14 @@ function index() {
           <LayoutWithSidebar>
             <CategoryCreate/>
           </LayoutWithSidebar>
-        </PrivateRoute>} />     
+        </PrivateRoute>} />  
+
+      <Route path="/Categorias/Update/:id" element={
+        <PrivateRoute>
+          <LayoutWithSidebar>
+            <CategoryUpdate/>
+          </LayoutWithSidebar>
+        </PrivateRoute>} />       
 
       <Route path="/Account" element={
         <PrivateRoute>

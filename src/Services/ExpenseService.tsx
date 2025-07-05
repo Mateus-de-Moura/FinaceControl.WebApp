@@ -28,10 +28,45 @@ export const GetExpense = async (search: string,
 }
 
 export function CreateExpense(expense: any) {
-  return Api.post('/api/Expense', expense);
+  const formData = new FormData();
+
+  formData.append('Description', expense.Description || '');
+  formData.append('Active', String(expense.Active) || '');
+  formData.append('Recurrent', String(expense.Recurrent) || '');
+  formData.append('CategoryId', expense.CategoryId || '');
+  formData.append('DueDate', expense.DueDate || '');
+  formData.append('Value', expense.Value || '');
+  formData.append('Status', String(expense.Status) || '');
+  if (expense.ProofFile) {
+    formData.append('ProofFile', expense.ProofFile); 
+  }
+
+  return Api.post('/api/Expense', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 }
+
 export function UpdateExpense(expense: any) {
-  return Api.put('/api/Expense', expense);
+ const formData = new FormData();
+
+  formData.append('Description', expense.Description || '');
+  formData.append('Active', String(expense.Active) || '');
+  formData.append('Recurrent', String(expense.Recurrent) || '');
+  formData.append('CategoryId', expense.CategoryId || '');
+  formData.append('DueDate', expense.DueDate || '');
+  formData.append('Value', expense.Value || '');
+  formData.append('Status', String(expense.Status) || '');
+  if (expense.ProofFile) {
+    formData.append('ProofFile', expense.ProofFile); 
+  }
+
+  return Api.put('/api/Expense', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 }
 
 export function GetById(id: string) {

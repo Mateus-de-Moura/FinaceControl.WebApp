@@ -19,9 +19,10 @@ import { useParams } from "react-router-dom";
 import { GetCategories } from "@/Services/CategoryService";
 import { GetById, UpdateExpense } from "@/Services/ExpenseService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import "jquery-mask-plugin";
+import { Trash } from "lucide-react";
 
 interface Category {
   id: string;
@@ -46,6 +47,9 @@ function Update() {
 
   const successToastId = useMemo(() => "successToastId", []);
   const errorToastId = useMemo(() => "errorToastId", []);
+
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [proofFile, setProofFile] = useState<File | null>(null);
 
   const mutation = useMutation({
     mutationFn: UpdateExpense,
@@ -79,18 +83,29 @@ function Update() {
     defaultValues: {
       Active: true,
       Recurrent: false,
-      Status: 0
+      Status: 0,
     },
   });
 
   const statusValue = watch("Status");
-  const statusString = statusValue !== undefined && statusValue !== null ? statusValue.toString() : "0";
+  const statusString =
+    statusValue !== undefined && statusValue !== null
+      ? statusValue.toString()
+      : "0";
+
+  const handleProofChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setProofFile(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+    }
+  };
 
   const onSubmit = async (data: any) => {
-    const { ...rest } = data;
-    console.log(data);
     mutation.mutate({
-      ...rest,
+      ...data,
+      ProofFile: proofFile,
     });
   };
 
@@ -107,12 +122,18 @@ function Update() {
       setValue("CategoryId", expense.categoryId);
       setValue("Status", expense.status);
       setValue("DueDate", expense.dueDate);
+      setValue("ProofFile", expense.proofFile);
 
       const date = new Date(expense.dueDate);
       const formattedDate = date.toISOString().split("T")[0];
       setValue("DueDate", formattedDate);
 
       setValue("Value", expense.value.toString());
+
+      if (expense.status === 1 && expense.proofFile) {
+        setPreviewUrl(expense.proofFile); // URL do backend
+        setProofFile(null);
+      }
     }
   }, [expense, setValue]);
 
@@ -173,7 +194,7 @@ function Update() {
               <div className="w-[50%]">
                 <label className="font-semibold">Categoria *</label>
                 <Select
-                  value={watch('CategoryId')}
+                  value={watch("CategoryId")}
                   {...register("CategoryId")}
                   onValueChange={(value) => setValue("CategoryId", value)}
                 >
@@ -214,7 +235,7 @@ function Update() {
               <div className="w-[24%] gap-1">
                 <label className="mb-1 font-semibold">Valor *</label>
                 <Input
-                  {...register('Value', { required: 'Valor é obrigatório' })}
+                  {...register("Value", { required: "Valor é obrigatório" })}
                   type="text"
                   className="money-mask"
                 />
@@ -242,6 +263,62 @@ function Update() {
                   </SelectContent>
                 </Select>
               </div>
+
+              {watch("Status") === 1 && (
+                <div className="mt-0">
+                  <label className="font-semibold block mb-2">
+                    Comprovante de pagamento
+                  </label>
+                  <div className="relative w-40 h-40 bg-gray-100 border border-gray-300 rounded flex items-center justify-center overflow-hidden cursor-pointer">
+                    <input
+                      id="proof-upload"
+                      type="file"
+                      accept="application/pdf,image/*"
+                      className="hidden"
+                      onChange={handleProofChange}
+                    />
+                    <label
+                      htmlFor="proof-upload"
+                      className="w-full h-full flex items-center justify-center"
+                    >
+                      {previewUrl ? (
+                        previewUrl.includes(".pdf") ? (
+                          <span className="text-sm text-gray-600 text-center">
+                            📄 PDF
+                          </span>
+                        ) : (
+                          <img
+                            src={previewUrl}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
+                        )
+                      ) : (
+                        <span className="text-gray-500 text-center">
+                          Clique para anexar
+                        </span>
+                      )}
+                    </label>
+                    {proofFile && (
+                      <button
+                        type="button"
+                        className="absolute top-1 right-1 bg-white p-1 rounded-full shadow-md hover:bg-gray-200"
+                        onClick={() => {
+                          setProofFile(null);
+                          setPreviewUrl(null);
+                        }}
+                      >
+                        <Trash className="w-4 h-4 text-red-600" />
+                      </button>
+                    )}
+                  </div>
+                  {proofFile && (
+                    <div className="mt-2 text-sm text-gray-700 text-center">
+                      {proofFile.name}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="w-[100%] mt-3 flex justify-between">
@@ -253,7 +330,7 @@ function Update() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 export default Update;

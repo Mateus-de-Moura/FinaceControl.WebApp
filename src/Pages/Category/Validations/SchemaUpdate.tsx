@@ -1,6 +1,10 @@
 import { z } from 'zod';
 
-export const validationSchema = z.object({
+export const validationSchemaCategoryUpdate = z.object({
+    Id: z.string({
+       required_error: "Id é obrigatório",
+       invalid_type_error: "Id inválido",
+  }),
     Active: z.boolean({
         required_error: "Active is required",
         invalid_type_error: "Ativo must be a boolean",
@@ -11,7 +15,7 @@ export const validationSchema = z.object({
     }),
     Name: z.string({
         required_error: "Name is required",
-        invalid_type_error: "Name must be a stringf",
+        invalid_type_error: "Nome é obrigatório",
     }),
     Type: z.string({
         required_error: "Type is required",
@@ -19,4 +23,4 @@ export const validationSchema = z.object({
     })
 });
 
-export type ValidationSchema = z.infer<typeof validationSchema>;
+export type ValidationSchemaCategory = z.infer<typeof validationSchemaCategoryUpdate>;
