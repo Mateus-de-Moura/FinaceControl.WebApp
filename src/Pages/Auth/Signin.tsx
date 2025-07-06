@@ -9,6 +9,8 @@ import { useState } from "react"
 import { useNavigate } from 'react-router-dom';
 import fundo from '../../assets/capa-controle-financeiro-quantosobra.png'
 import { useAuth } from "./AuthContext"
+import { Eye, EyeOff } from 'lucide-react';
+
 
 function Signin() {
 
@@ -17,6 +19,7 @@ function Signin() {
   const [password, setPassword] = useState('');
   const [emailInvalid, setEmailInvalid] = useState(false);
   const { setUser } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const { mutate: loginUser, isPending } = useLoginUser(email, password);
 
@@ -26,11 +29,8 @@ function Signin() {
     navigate('/home');
   };
 
-  const handleLoginError = (error: any) => { 
-    const response = error?.response?.data;    
-    if (response?.responseInfo.httpStatus === 404) {
-      setEmailInvalid(true);
-    }
+  const handleLoginError = () => {
+    setEmailInvalid(true);
   };
 
   const handleLogin = () => {
@@ -63,15 +63,28 @@ function Signin() {
             <div className="mt-4">
               <Label htmlFor="email">E-mail</Label>
               <Input placeholder="exemplo@email.com" id="email" type="email" onChange={e => setEmail(e.target.value)} />
-              {emailInvalid &&
-                <span className=" text-red-500"> E-mail ou Senha incorretos</span>
-              }
             </div>
             <div className="mt-4">
               <Label htmlFor="senha">Senha</Label>
-              <Input placeholder="sua senha" id="senha" type="password" onChange={e => setPassword(e.target.value)} />
+              <div className="relative">
+                <Input
+                  placeholder="sua senha"
+                  id="senha"
+                  type={showPassword ? "text" : "password"}
+                  onChange={e => setPassword(e.target.value)}
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  onClick={() => setShowPassword(prev => !prev)}
+                >
+                  {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                </button>
+
+              </div>
               {emailInvalid &&
-                <span className=" text-red-500"> E-mail ou Senha incorretos</span>
+                <span className="text-red-500">E-mail ou Senha incorretos</span>
               }
             </div>
 

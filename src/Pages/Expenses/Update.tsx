@@ -114,7 +114,7 @@ function Update() {
   };
 
   useEffect(() => {
-    if (expense) {
+    if (expense && rolesQuery.isSuccess && !rolesQuery.isFetching) {
       setValue("IdExpense", expense.id);
       setValue("Active", expense.active);
       setValue("Recurrent", expense.isRecurrent);
@@ -135,7 +135,7 @@ function Update() {
         setProofFile(null);
       }
     }
-  }, [expense, setValue]);
+  }, [expense,rolesQuery.isSuccess, rolesQuery.isFetching, setValue]);
 
   return (
     <div className="p-5">

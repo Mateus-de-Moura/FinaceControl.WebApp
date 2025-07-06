@@ -45,7 +45,7 @@ const Overview: React.FC<OverviewProps> = ({ onViewChange }) => {
           reader.onloadend = () => {
             setImage(reader.result as string);
           };
-          
+
           reader.readAsDataURL(selectedFile);
           window.location.reload();
         }
@@ -112,7 +112,7 @@ const Overview: React.FC<OverviewProps> = ({ onViewChange }) => {
           <h6 className="mb-4">Torne sua senha mais forte ou altere-a se alguém mais a souber.</h6>
         </div>
         <div className="flex justify-center items-center mt-5">
-          <Link className='text-blue-500' to="/">Alterar Senha</Link>
+          <div className='text-blue-500 hover:cursor-pointer' onClick={() => onViewChange('password')}>Alterar Senha</div>
         </div>
       </div>
 

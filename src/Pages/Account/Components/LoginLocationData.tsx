@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { useQuery } from '@tanstack/react-query';
 import { getLocation } from "@/Services/LoginLocationDataService";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { LatLngExpression } from 'leaflet';
 import "leaflet/dist/leaflet.css";
 
 function LoginLocationData() {
@@ -36,7 +35,7 @@ function LoginLocationData() {
                 {locationsQuery.data?.data && locationsQuery.data.data.map((item: any) => (
                     <Accordion type="single" collapsible>
                         <AccordionItem value="item-1">
-                            <AccordionTrigger deviceType={item.platform} status="success" />
+                            <AccordionTrigger deviceType={item.platform} status={item.isSuccess ? "success" : "error"}/>
                             <AccordionContent>
                                 <div className="mt-5 flex flex-wrap gap-3 mb-5">                                    
                                     <div className="w-full sm:w-[20%] lg:w-[40%] mb-8">

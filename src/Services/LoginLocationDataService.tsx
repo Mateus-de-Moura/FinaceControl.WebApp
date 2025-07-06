@@ -1,7 +1,7 @@
 import Api from "@/Api";
 import { LocationData } from "@/common/Interfaces/LocationData.d";
 
-export const fetchLocationData = async (emailLogin: string) => {
+export const fetchLocationData = async (emailLogin: string, success: boolean) => {
     const { latitude, longitude } = await getGeolocation();
     const userAgent = navigator.userAgent.toLowerCase();
     const isMobile = /android|iphone|ipad|ipod|windows phone/i.test(userAgent);
@@ -10,6 +10,7 @@ export const fetchLocationData = async (emailLogin: string) => {
     const os = getOperatingSystemAndVersion();
 
     const locationData = {
+        IsSuccess: success,
         email: emailLogin,
         latitude,
         longitude,        

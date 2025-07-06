@@ -83,14 +83,12 @@ function Update() {
     };
 
     useEffect(() => {
-        console.log(revenue)
-        if (revenue) {
+        if (revenue && rolesQuery.isSuccess && !rolesQuery.isFetching) {
             setValue('Id', revenue.id);
             setValue('Active', revenue.active);
             setValue('Recurrent', revenue.isRecurrent);
             setValue('Description', revenue.description);
             setValue('CategoryId', revenue.categoryId);
-            setValue('Date', revenue.date);
 
             const date = new Date(revenue.date);
             const formattedDate = date.toISOString().split('T')[0];
@@ -98,7 +96,7 @@ function Update() {
 
             setValue('Value', revenue.value);
         }
-    }, [revenue, setValue]);
+    }, [revenue, rolesQuery.isSuccess, rolesQuery.isFetching, setValue]);
 
 
     return (
@@ -144,7 +142,7 @@ function Update() {
                                 <label className='font-semibold'>Categoria *</label>
                                 <Select value={watch('CategoryId')} {...register('CategoryId')} onValueChange={(value) => setValue('CategoryId', value)} >
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Theme" />
+                                        <SelectValue placeholder="Selecione" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem key="0" value="0" disabled   >Selecione</SelectItem >
@@ -183,7 +181,7 @@ function Update() {
                                     value={getValues('Value')}
                                     allowNegative={false}
                                     onValueChange={(values) => {
-                                        setValue('Value', String(values.value)); 
+                                        setValue('Value', String(values.value));
                                     }}
                                 />
                                 <p className='text-red-500'>{errors.Value?.message}</p>

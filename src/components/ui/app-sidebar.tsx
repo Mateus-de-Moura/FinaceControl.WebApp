@@ -1,14 +1,15 @@
 "use client"
 import * as React from "react"
 import { Link } from "react-router"
-
+import { useSidebar } from "@/components/ui/sidebar"
 import {
   ArrowUpCircleIcon,
   ChartNoAxesCombined,
-  LayoutDashboardIcon, 
   UsersIcon,
   BanknoteArrowDown,
   ChartBarStacked,
+  CreditCard,
+  House
 } from "lucide-react"
 
 import {
@@ -24,13 +25,17 @@ import {
 import { NavMain } from "@/components/ui/nav-main"
 import { NavUser } from "@/components/ui/nav-user"
 
-const navItems = [
-  { title: "Home", url: "/home", icon: LayoutDashboardIcon },
+const navItensCad = [
   { title: "Usuários", url: "/Users", icon: UsersIcon },
   { title: "Receitas", url: "/Receitas", icon: ChartNoAxesCombined },
   { title: "Despesas", url: "/Despesas", icon: BanknoteArrowDown },
-  { title: "Categorias", url: "/Categorias", icon: ChartBarStacked},
-  { title: "Team", url: "/team", icon: UsersIcon },
+  { title: "Categorias", url: "/Categorias", icon: ChartBarStacked },
+  { title: "Transações", url: "/transacoes", icon: CreditCard },
+]
+
+const navItems = [
+  { title: "Home", url: "/home", icon: House },
+  // { title: "Team", url: "/team", icon: UsersIcon },
 ]
 
 const user = {
@@ -40,8 +45,9 @@ const user = {
 }
 
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
+  const { state } = useSidebar()
   return (
-    <Sidebar collapsible="offcanvas"  {...props}>
+    <Sidebar collapsible="icon"  {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -60,6 +66,16 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarContent>
         <NavMain items={navItems} />
+
+        {state === "expanded" && (
+          <>
+            <div className="px-3 mt-1">
+              <p>Cadastros</p>
+            </div>           
+          </>
+        )}
+
+        <NavMain items={navItensCad} />
       </SidebarContent>
 
       <SidebarFooter>
