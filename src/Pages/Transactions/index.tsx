@@ -21,6 +21,8 @@ interface UsersTableProps {
     Date: Date;
     Category: string;
     transactionType: string;
+    type: string;
+    Status: string;
 }
 
 function index() {
@@ -31,7 +33,9 @@ function index() {
     const transactionsQuery = useQuery({
         queryKey: ['transactions', search, page, dateRange],
         queryFn: () => GetTransactions(search, page, dateRange[0], dateRange[1]),
-    });  
+    });
+
+
 
     const usersColumns = useMemo<ColumnDef<UsersTableProps>[]>(
         () => [
@@ -56,7 +60,7 @@ function index() {
                     className: "w-[100px] min-w-[100px] ",
                 }
             },
-              {
+            {
                 header: 'Descrição',
                 accessorKey: 'description',
                 meta: {
@@ -76,13 +80,13 @@ function index() {
                 meta: {
                     className: "w-[100px] min-w-[100px] ",
                 }
-            },          
+            },
             {
                 header: 'Valor',
                 accessorKey: 'value',
                 cell: info => {
                     const row = info.row.original;
-                    const isDespesa = row.transactionType === 'Despesa';                  
+                    const isDespesa = row.type === 'Despesas';
 
                     return (
                         <div className="flex items-center gap-2">
@@ -111,6 +115,19 @@ function index() {
             {
                 header: 'Status',
                 accessorKey: 'status',
+                cell: info => {
+                    const status = info.row.original.Status || info.getValue() as string;
+                    const statusColor =
+                        status === 'Confirmado' ? 'text-green-600'
+                            : status === 'Pendente' ? 'text-yellow-600'
+                                : status === 'Cancelado' ? 'text-red-600'
+                                    : 'text-gray-600';
+                    return (
+                        <span className={statusColor}>
+                            {status}
+                        </span>
+                    );
+                },
                 meta: {
                     className: "w-[100px] min-w-[100px] ",
                 }
@@ -120,7 +137,7 @@ function index() {
                 accessorKey: 'id',
                 cell: info => {
                     return (
-                        <Link to={`/Receitas/Update/${info.getValue()}`}>
+                        <Link to={`/transacoes/Update/${info.getValue()}`}>
                             <Edit size={16} />
                         </Link>
                     );
@@ -144,13 +161,15 @@ function index() {
 
     const data = transactionsQuery.data?.items || [];
 
+    console.log(data)
+
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     return (
         <div className="p-5 ">
             <div className="flex items-center justify-between gap-12 mb-3">
                 <h6 className="font-semibold">Gerenciamento de Transações</h6>
-                <Link to="/Receitas/Create" className={buttonVariants({ variant: "default", size: "sm" })}>
+                <Link to="/transacoes/Create" className={buttonVariants({ variant: "default", size: "sm" })}>
                     Cadastrar nova transação</Link>
             </div>
             <Card className="p-5 bg-white h-[620px]">

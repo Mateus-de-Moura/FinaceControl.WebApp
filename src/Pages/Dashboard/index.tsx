@@ -18,6 +18,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
+import TransactionCard from "./Transactions";
 
 
 const chartConfig = {
@@ -32,7 +33,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export default function Page() {
-   
+
     const dashboardQuery = useQuery({
         queryKey: ['dashboard'],
         queryFn: GetDashboard,
@@ -42,10 +43,10 @@ export default function Page() {
     });
     const dashboard = dashboardQuery.data?.data;
 
-   const chartData = dashboard?.monthlySummary.map((monthData: any) => ({
-        month: monthData.month, 
-        desktop: monthData.revenues, 
-        mobile: monthData.expenses, 
+    const chartData = dashboard?.monthlySummary.map((monthData: any) => ({
+        month: monthData.month,
+        desktop: monthData.revenues,
+        mobile: monthData.expenses,
     }))
 
     return (
@@ -58,7 +59,7 @@ export default function Page() {
                     <SectionCards />
                 </div>
                 <div className="flex flex-col md:flex-row w-[98%]">
-                    <div className="w-[100%]">
+                    <div className="w-[70%]">
                         <div className="pl-6 pr-4 h-full md:h-screen">
                             <Card className="p-5">
                                 <CardHeader>
@@ -76,36 +77,19 @@ export default function Page() {
                                                 axisLine={true}
                                                 tickFormatter={(value) => value.slice(0, 3)}
                                             />
-                                            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />}                                            />
+                                            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
                                             <ChartLegend content={<ChartLegendContent />} />
                                             <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
                                             <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
                                         </BarChart>
                                     </ChartContainer>
-                                </CardContent>                             
+                                </CardContent>
                             </Card>
                         </div>
                     </div>
-                    <div className=" pl-6 pr-4 mt-5 w-[100%] md:w-[31%] md:pr-0 md:pl-0 md:mt-0">
-                        <Card className="p-4 ">
-                            <CardTitle>
-                                Ultimas Movimentações
-                            </CardTitle>
-                            <CardContent className="mt-5 ">
-                                <ul>
-                                    <li>
-                                        teste lista de movimentação
-                                    </li>
-                                    <li>
-                                        teste lista de movimentação
-                                    </li>
-                                    <li>
-                                        teste lista de movimentação
-                                    </li>
-                                </ul>
-                            </CardContent>
-                        </Card>
-                    </div>
+
+                    <TransactionCard />
+
 
                 </div>
 

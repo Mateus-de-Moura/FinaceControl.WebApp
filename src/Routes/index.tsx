@@ -20,6 +20,8 @@ import Category from "@/Pages/Category/Index"
 import CategoryCreate from "@/Pages/Category/Create"
 import Notify from "@/Pages/Notify/Notify";
 import Transaction from '@/Pages/Transactions/index'
+import TransactionsCreate from '@/Pages/Transactions/Create'
+import TransactionsUpdate from '@/Pages/Transactions/Update'
 
 interface LayoutWithSidebarProps {
   children: ReactNode;
@@ -145,6 +147,20 @@ function index() {
         <PrivateRoute>
           <LayoutWithSidebar>
             <Transaction />
+          </LayoutWithSidebar>
+        </PrivateRoute>} />
+
+         <Route path="/transacoes/Create" element={
+        <PrivateRoute>
+          <LayoutWithSidebar>
+            <TransactionsCreate />
+          </LayoutWithSidebar>
+        </PrivateRoute>} />
+
+        <Route path="/transacoes/Update/:id" element={
+        <PrivateRoute>
+          <LayoutWithSidebar>
+            <TransactionsUpdate />
           </LayoutWithSidebar>
         </PrivateRoute>} />
 
