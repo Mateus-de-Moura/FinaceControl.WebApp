@@ -21,3 +21,16 @@ export const GetTransactions = async (search: string, page: number, startDate?: 
   }
   return response.data;
 }
+
+export const UpdateTransactions = async (transaction: any) => {
+  return await Api.put('api/Transactions', transaction);
+}
+
+export const CreateTransaction = async (transaction: any) => {
+  return await Api.post('api/Transactions', transaction);
+}
+
+export async function GetTransactionById(id: string) {
+  const response = await Api.get(`api/transactions/update/${id}`);
+  return response.data;
+}
