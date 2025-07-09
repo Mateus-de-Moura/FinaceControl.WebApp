@@ -19,7 +19,7 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart"
 import TransactionCard from "./Transactions";
-
+import { Group } from 'lucide-react';
 
 const chartConfig = {
     desktop: {
@@ -53,7 +53,15 @@ export default function Page() {
         <div className="flex flex-1 flex-col ">
             <div className="@container/main flex flex-1 flex-col ">
                 <div className="pl-5 pt-5">
-                    <h6 className="text-blue-700 font-semibold">DashBoard</h6>
+                    <Card className="p-3  md:gap-2  w-[98%]">
+                        <div className="flex flex-row gap-3">
+                            <Group className="text-blue-700" />
+                            <h6 className="text-blue-700 font-semibold">DashBoard</h6>
+                        </div>
+                           <div className="flex flex-row gap-3">                            
+                            <p>Monitoramento de finanças em tempo real</p>
+                        </div>
+                    </Card>
                 </div>
                 <div className="flex flex-col gap-5 py-4 md:gap-6 md:py-4">
                     <SectionCards />
