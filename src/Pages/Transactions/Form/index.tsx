@@ -93,7 +93,7 @@ function index({ Id }: Props) {
 
     useEffect(() => {
         if (transactionData && rolesQuery.isSuccess && !rolesQuery.isFetching) {    
-              console.log(transactionData)    
+           
             const date = new Date(transactionData.transactionDate);
             const formattedDate = date.toISOString().split('T')[0];
 

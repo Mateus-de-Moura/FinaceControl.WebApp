@@ -24,8 +24,7 @@ interface Category {
 
 function Create() {
     const rolesQuery = useQuery({ queryKey: ['category'], queryFn: GetCategories });
-
-    console.log(rolesQuery)
+        
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 

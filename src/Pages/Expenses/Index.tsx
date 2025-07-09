@@ -136,8 +136,7 @@ function Index() {
       },
     ],
     []
-  );
-  console.log(data)
+  ); 
 
   return (
     <div className="p-5 ">

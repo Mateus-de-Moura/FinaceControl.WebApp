@@ -15,8 +15,6 @@ function LoginLocationData() {
         refetchOnReconnect: false,
         retry: false,
     });
-    const locations = locationsQuery.data?.data;
-    console.log(locations)
 
     const mapContainerStyle = {
         width: "90%",

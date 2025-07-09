@@ -161,8 +161,6 @@ function index() {
 
     const data = transactionsQuery.data?.items || [];
 
-    console.log(data)
-
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     return (

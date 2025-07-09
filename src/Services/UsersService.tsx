@@ -11,7 +11,7 @@ export const GetUsers = async (search: string, page: number) => {
 }
 
 export function Create(user: any) {
-  console.log(user)
+
   const formData = new FormData();
 
   formData.append('Active', String(user.Active));
@@ -35,7 +35,7 @@ export function Create(user: any) {
 }
 
 export function UpdateUser(user: any) {
-  console.log(user)
+  
   const formData = new FormData();
 
   formData.append('Id', user.Id);

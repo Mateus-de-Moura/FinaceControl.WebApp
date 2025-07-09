@@ -38,6 +38,9 @@ function Update() {
   const response = useQuery({
     queryKey: ["expense"],
     queryFn: () => GetById(id as string),
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    retry: false,
   });
   const expense = response.data?.data;
 
@@ -87,8 +90,7 @@ function Update() {
   const statusString = statusValue !== undefined && statusValue !== null ? statusValue.toString() : "0";
 
   const onSubmit = async (data: any) => {
-    const { ...rest } = data;
-    console.log(data);
+    const { ...rest } = data;  
     mutation.mutate({
       ...rest,
     });
