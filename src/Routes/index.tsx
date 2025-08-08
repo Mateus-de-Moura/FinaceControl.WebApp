@@ -18,6 +18,7 @@ import ExpensesCreate from "@/Pages/Expenses/Create"
 import ExpensesUpdate from "@/Pages/Expenses/Update"
 import Category from "@/Pages/Category/Index"
 import CategoryCreate from "@/Pages/Category/Create"
+import CategoryUpdate from "@/Pages/Category/Update"
 import Notify from "@/Pages/Notify/Notify";
 import Transaction from '@/Pages/Transactions/index'
 import TransactionsCreate from '@/Pages/Transactions/Create'
@@ -126,6 +127,13 @@ function index() {
         <PrivateRoute>
           <LayoutWithSidebar>
             <CategoryCreate />
+          </LayoutWithSidebar>
+        </PrivateRoute>} />
+
+        <Route path="/Categorias/Update/:id" element={
+        <PrivateRoute>
+          <LayoutWithSidebar>
+            <CategoryUpdate />
           </LayoutWithSidebar>
         </PrivateRoute>} />
 

@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import { Link } from "react-router";
 import True from "../../assets/true.svg";
 import False from "../../assets/false.svg";
+import { Edit } from "react-feather";
 
 interface CategoryTableProps {
   Id: string;
@@ -63,6 +64,32 @@ function Index() {
       {
         header: "Tipo",
         accessorKey: "type",
+        cell: (info) => {
+          const type = info.row.original.Type || info.getValue() as number;
+          let value = "";
+          console.log(type);
+          if (type === 0) {
+            value = "Despesa";
+          } else  {
+            value = "Receita";
+          }
+
+          return value;
+        },
+        meta: {
+          className: "w-[100px] min-w-[100px] ",
+        },
+      },
+      {
+        header: "",
+        accessorKey: "id",
+        cell: (info) => {
+          return (
+            <Link to={`/Categorias/Update/${info.getValue()}`}>
+              <Edit size={16} />
+            </Link>
+          );
+        },
         meta: {
           className: "w-[100px] min-w-[100px] ",
         },
@@ -83,9 +110,9 @@ function Index() {
           Cadastrar nova categoria
         </Link>
       </div>
-        <div className="mt-3 mb-3 h-full">
-          <DataTable columns={categoryColumns} data={data} />
-        </div>
+      <div className="mt-3 mb-3 h-full">
+        <DataTable columns={categoryColumns} data={data} />
+      </div>
     </div>
   );
 }

@@ -141,7 +141,7 @@ function index({ Id }: Props) {
 
                             <div className='w-[30%]'>
                                 <label className='font-semibold'>Tipo *</label>
-                                <Select defaultValue={transactionData ? String(transactionData.type) : "3"} {...register('Type')} onValueChange={(value) => setValue('Type', value)} >
+                                <Select value={transactionData ? String(transactionData.type) : "3"} {...register('Type')} onValueChange={(value) => setValue('Type', value)} >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Theme" />
                                     </SelectTrigger>
@@ -206,7 +206,7 @@ function index({ Id }: Props) {
                             </div>
                             <div className='w-[30%]'>
                                 <label className='font-semibold'>Tipo de pagamento *</label>
-                                <Select defaultValue={transactionData ? String(transactionData.paymentMethod) : "3"} {...register('PaymentMethod')} onValueChange={(value) => setValue('PaymentMethod', value)} >
+                                <Select value={transactionData ? String(transactionData.paymentMethod) : "3"} {...register('PaymentMethod')} onValueChange={(value) => setValue('PaymentMethod', value)} >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Theme" />
                                     </SelectTrigger>
