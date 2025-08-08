@@ -50,7 +50,7 @@ export default function Page() {
     }))
 
     return (
-        <div className="flex flex-1 flex-col ">
+        <div className="flex flex-1 flex-col min-h-screen">
             <div className="@container/main flex flex-1 flex-col ">
                 <div className="pl-5 pt-5">
                     <Card className="p-3  md:gap-2  w-[98%]">
@@ -66,9 +66,9 @@ export default function Page() {
                 <div className="flex flex-col gap-5 py-4 md:gap-6 md:py-4">
                     <SectionCards />
                 </div>
-                <div className="flex flex-col md:flex-row w-[98%]">
+                <div className="flex flex-col md:flex-row w-[98%] felx-1">
                     <div className="w-[70%]">
-                        <div className="pl-6 pr-4 h-full md:h-screen">
+                        <div className="pl-6 pr-4 h-screen w-[390px] md:w-full md:h-screen">
                             <Card className="p-5">
                                 <CardHeader>
                                     <CardTitle>Gestão anual</CardTitle>
@@ -95,15 +95,8 @@ export default function Page() {
                             </Card>
                         </div>
                     </div>
-
                     <TransactionCard />
-
-
                 </div>
-
-
-
-
             </div>
         </div>
     )

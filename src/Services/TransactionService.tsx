@@ -34,3 +34,8 @@ export async function GetTransactionById(id: string) {
   const response = await Api.get(`api/transactions/update/${id}`);
   return response.data;
 }
+
+export async function GetRecentTransactions(){
+  const response = await Api.get(`api/transactions/RecentTransactions`);
+  return response.data;
+}

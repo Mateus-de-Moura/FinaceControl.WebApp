@@ -63,7 +63,7 @@ function Create() {
     const onSubmit = async (data: any) => {
         const { ...rest } = data;
 
-
+        console.log(data);
         mutation.mutate({
             ...rest,
         });
@@ -157,7 +157,7 @@ function Create() {
 
                             <div className="w-48">
                                 <label className="font-semibold">Status </label>
-                                <Select                                   
+                                <Select
                                     onValueChange={(value) => setValue("Status", parseInt(value))}
                                 >
                                     <SelectTrigger className="w-[180px]">

@@ -3,11 +3,14 @@ import { DataTable } from "@/components/ui/DataTable/data-table";
 import { GetCategories } from "@/Services/CategoryService";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router";
 import True from "../../assets/true.svg";
 import False from "../../assets/false.svg";
 import { Edit } from "react-feather";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, } from "@/components/ui/pagination";
+import { Card } from "@/components/ui/card";
+import { SearchWithDate } from "@/components/SearchWithDate";
 
 interface CategoryTableProps {
   Id: string;
@@ -16,15 +19,30 @@ interface CategoryTableProps {
 }
 
 function Index() {
+
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
+
   const categoriesQuery = useQuery({
-    queryKey: ["categories"],
-    queryFn: () => GetCategories(),
+    queryKey: ["categories", search, page, dateRange],
+    queryFn: () => GetCategories(search, page, dateRange[0], dateRange[1]),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     retry: false,
   });
 
-  const data = categoriesQuery.data || [];
+  const currentPage = page;
+  const totalPages = categoriesQuery.data?.totalPages || 1;
+  const totalCount = categoriesQuery.data?.totalCount
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    setPage(newPage);
+  };
+
+  const data = categoriesQuery?.data?.items || [];
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   const categoryColumns = useMemo<ColumnDef<CategoryTableProps>[]>(
     () => [
@@ -70,7 +88,7 @@ function Index() {
           console.log(type);
           if (type === 0) {
             value = "Despesa";
-          } else  {
+          } else {
             value = "Receita";
           }
 
@@ -110,9 +128,59 @@ function Index() {
           Cadastrar nova categoria
         </Link>
       </div>
-      <div className="mt-3 mb-3 h-full">
-        <DataTable columns={categoryColumns} data={data} />
-      </div>
+      <Card className="p-5 bg-white h-[620px]">
+        <div className='w-full flex justify-end gap-2'>
+          <SearchWithDate
+            onSearch={(searchText, startDate, endDate) => {
+              setSearch(searchText);
+              setDateRange([startDate, endDate]);
+            }}
+          />
+        </div>
+
+        <div className="mt-3 mb-3 h-full">
+          <DataTable columns={categoryColumns} data={data} />
+        </div>
+        <div className="pl-6 pr-6 mt-5">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                />
+              </PaginationItem>
+
+              {pages.map(p => (
+                <PaginationItem key={p}>
+                  <PaginationLink
+
+                    isActive={p === currentPage}
+                    onClick={() => handlePageChange(p)}
+                  >
+                    {p}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              <PaginationItem>
+                <PaginationNext
+
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                />
+              </PaginationItem>
+
+              <PaginationItem>
+                <div className="ml-8">Mostrando {data.length} de {totalCount} Registros</div>
+              </PaginationItem>
+
+
+            </PaginationContent>
+          </Pagination>
+        </div>
+      </Card>
     </div>
   );
 }

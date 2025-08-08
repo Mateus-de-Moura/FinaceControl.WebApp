@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ValidationSchema, validationSchema } from "../Validations/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { GetCategories } from "@/Services/CategoryService";
+import { GetAllCategories } from "@/Services/CategoryService";
 import { useEffect, useMemo } from "react";
 import { toast } from "react-toastify";
 import { CreateTransaction, UpdateTransactions, GetTransactionById } from "@/Services/TransactionService";
@@ -23,6 +23,7 @@ interface Category {
 }
 
 function index({ Id }: Props) {
+    let title = Id ? "Edição de Receita" : "Cadastro de Receita";
 
     const { data: transactionData } = useQuery({
         queryKey: ['transaction', Id],
@@ -30,7 +31,7 @@ function index({ Id }: Props) {
         enabled: !!Id,        
     });
   
-    const rolesQuery = useQuery({ queryKey: ['category'], queryFn: GetCategories });
+    const rolesQuery = useQuery({ queryKey: ['category'], queryFn: GetAllCategories });
 
     const { register,watch, handleSubmit, setValue, getValues, formState: { errors } } = useForm<ValidationSchema>({
         resolver: zodResolver(validationSchema),
@@ -113,7 +114,7 @@ function index({ Id }: Props) {
     return (
         <div className='p-5' >
             <div className="flex items-center justify-between gap-12 mb-3">
-                <h6 className="font-semibold">Gerenciamento de Receitas</h6>
+                <h6 className="font-semibold">{title}</h6>
                 <Link to="/transacoes" className={buttonVariants({ variant: "default", size: "sm" })}>Voltar</Link>
             </div>
             <Card className='p-5'>
@@ -141,7 +142,7 @@ function index({ Id }: Props) {
 
                             <div className='w-[30%]'>
                                 <label className='font-semibold'>Tipo *</label>
-                                <Select value={transactionData ? String(transactionData.type) : "3"} {...register('Type')} onValueChange={(value) => setValue('Type', value)} >
+                                <Select defaultValue={transactionData ? String(transactionData.type) : "3"} {...register('Type')} onValueChange={(value) => setValue('Type', value)} >
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Theme" />
                                     </SelectTrigger>
