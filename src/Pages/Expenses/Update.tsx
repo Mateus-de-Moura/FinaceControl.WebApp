@@ -16,7 +16,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent } from "@/components/ui/card";
 import { useParams } from "react-router-dom";
-import { GetCategories } from "@/Services/CategoryService";
+import { GetAllCategories } from "@/Services/CategoryService";
 import { GetById, UpdateExpense } from "@/Services/ExpenseService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
@@ -33,7 +33,7 @@ function Update() {
 
   const rolesQuery = useQuery({
     queryKey: ["category"],
-    queryFn: GetCategories,
+    queryFn: GetAllCategories,
   });
   const response = useQuery({
     queryKey: ["expense"],

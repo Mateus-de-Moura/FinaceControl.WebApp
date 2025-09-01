@@ -22,11 +22,10 @@ function Index() {
 
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
 
   const categoriesQuery = useQuery({
-    queryKey: ["categories", search, page, dateRange],
-    queryFn: () => GetCategories(search, page, dateRange[0], dateRange[1]),
+    queryKey: ["categories", search, page],
+    queryFn: () => GetCategories(search, page),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     retry: false,
@@ -131,9 +130,9 @@ function Index() {
       <Card className="p-5 bg-white h-[620px]">
         <div className='w-full flex justify-end gap-2'>
           <SearchWithDate
-            onSearch={(searchText, startDate, endDate) => {
-              setSearch(searchText);
-              setDateRange([startDate, endDate]);
+            showRangeDate={false}
+            onSearch={(searchText) => {
+              setSearch(searchText);              
             }}
           />
         </div>

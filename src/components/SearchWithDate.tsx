@@ -9,12 +9,14 @@ interface SearchWithDateProps {
   onSearch: (searchText: string, startDate: Date | null, endDate: Date | null) => void;
   initialSearchText?: string;
   initialDateRange?: [Date | null, Date | null];
+  showRangeDate: boolean;
 }
 
 export const SearchWithDate = ({
   onSearch,
   initialSearchText = "",
   initialDateRange = [null, null],
+  showRangeDate = true,
 }: SearchWithDateProps) => {
   const [searchText, setSearchText] = useState(initialSearchText);
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>(initialDateRange);
@@ -36,16 +38,18 @@ export const SearchWithDate = ({
   return (
     <div className="flex gap-2 items-end">
       <div>
-        <DatePicker
-          selectsRange
-          startDate={startDate}
-          endDate={endDate}
-          onChange={(update: [Date | null, Date | null]) => setDateRange(update)}
-          placeholderText="Selecionar intervalo de datas"
-          className="border border-input bg-background rounded px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 h-9 w-[210px]"
-          dateFormat="dd/MM/yyyy"
-          isClearable
-        />
+        {showRangeDate &&
+          <DatePicker
+            selectsRange
+            startDate={startDate}
+            endDate={endDate}
+            onChange={(update: [Date | null, Date | null]) => setDateRange(update)}
+            placeholderText="Selecionar intervalo de datas"
+            className="border border-input bg-background rounded px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 h-9 w-[210px]"
+            dateFormat="dd/MM/yyyy"
+            isClearable
+          />
+        }
       </div>
       <div className="w-72">
         <Input

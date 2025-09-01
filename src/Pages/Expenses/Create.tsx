@@ -11,7 +11,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { GetCategories } from '@/Services/CategoryService';
+import { GetAllCategories } from '@/Services/CategoryService';
 import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
 import 'jquery-mask-plugin';
@@ -24,7 +24,7 @@ interface Category {
 }
 
 function Create() {
-    const rolesQuery = useQuery({ queryKey: ['category'], queryFn: GetCategories });
+    const rolesQuery = useQuery({ queryKey: ['category'], queryFn: GetAllCategories });
 
     const navigate = useNavigate();
     const queryClient = useQueryClient();
