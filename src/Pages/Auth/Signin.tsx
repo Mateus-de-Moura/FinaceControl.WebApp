@@ -3,13 +3,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Label } from "@radix-ui/react-label"
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { useLoginUser } from "../../hooks/userAuthUser";
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom';
 import fundo from '../../assets/capa-controle-financeiro-quantosobra.png'
 import { useAuth } from "./AuthContext"
 import { Eye, EyeOff } from 'lucide-react';
+import Login from "@/components/login-github"
 
 
 function Signin() {
@@ -96,7 +96,7 @@ function Signin() {
               <Separator />
             </div>
 
-            <Button variant="outline" className="mt-6 mb-4 w-full">Entrar com o Github <GitHubLogoIcon></GitHubLogoIcon></Button>
+            <Login/>
 
           </CardContent>
         </Card>

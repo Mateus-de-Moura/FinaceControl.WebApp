@@ -23,6 +23,7 @@ import Notify from "@/Pages/Notify/Notify";
 import Transaction from '@/Pages/Transactions/index'
 import TransactionsCreate from '@/Pages/Transactions/Create'
 import TransactionsUpdate from '@/Pages/Transactions/Update'
+import AuthCallback from "@/Pages/Auth/AuthCallback";
 
 interface LayoutWithSidebarProps {
   children: ReactNode;
@@ -171,6 +172,8 @@ function index() {
             <TransactionsUpdate />
           </LayoutWithSidebar>
         </PrivateRoute>} />
+
+          <Route path="/auth/callback" element={<AuthCallback />} />
 
     </Routes>
   )

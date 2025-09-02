@@ -14,6 +14,7 @@ interface OverviewProps {
 }
 
 const Overview: React.FC<OverviewProps> = ({ onViewChange }) => {
+  const [isUrlImage, setUrlImage] = useState<boolean>(false);
   const { user, updatePhoto: updatePhotoContext } = useAuth();
   const [image, setImage] = useState<string | null>(null);
   const successToastId = useMemo(() => 'successToastId', []);
@@ -21,10 +22,14 @@ const Overview: React.FC<OverviewProps> = ({ onViewChange }) => {
 
   useEffect(() => {
     if (user?.photo) {
-      const photo = `data:image/png;base64,${user.photo}`;
+      const isUrl = user.photo.startsWith('https');
+      setUrlImage(isUrl);
+
+      const photo = isUrl ? user.photo : `data:image/png;base64,${user.photo}`;
       setImage(photo);
     }
   }, [user?.photo]);
+
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
@@ -63,7 +68,10 @@ const Overview: React.FC<OverviewProps> = ({ onViewChange }) => {
     <div className='grid grid-cols-1 sm:grid-cols-2 gap-10'>
       <div className="p-5 border shadow-lg rounded-2xl">
         <div className="flex justify-center items-center mb-4">
-          <label htmlFor="upload-photo" className="cursor-pointer">
+          <label
+            htmlFor={!isUrlImage ? "upload-photo" : undefined}
+            className={`cursor-pointer ${isUrlImage ? 'pointer-events-none ' : ''}`}
+          >
             <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden border-4 border-gray-300">
               {image ? (
                 <img src={image} alt="Preview" className="w-full h-full object-cover" />
@@ -71,9 +79,19 @@ const Overview: React.FC<OverviewProps> = ({ onViewChange }) => {
                 <span className="text-gray-500 text-center">Clique para adicionar foto</span>
               )}
             </div>
-            <input id="upload-photo" type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+                     
+            {!isUrlImage && (
+              <input
+                id="upload-photo"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageChange}
+              />
+            )}
           </label>
         </div>
+
         <div className="flex justify-center items-center">
           <h2 className="text-xl font-semibold mb-4">{user?.name}</h2>
         </div>

@@ -59,8 +59,13 @@ export function NavUser({
 
   const storedData = localStorage.getItem('loginData');
   var data = JSON.parse(storedData!) as AuthUser;
+  let photo = "";
+  const isUrl = data.photo.startsWith('https');
 
-  var photo = `data:image/png;base64,${data.photo}`;
+  if (isUrl)
+    photo = data.photo;
+  else
+    photo = `data:image/png;base64,${data.photo}`;
 
   useNotification(data.id, (msg: string) => {
     toast.info(`🔔 ${msg}`);
