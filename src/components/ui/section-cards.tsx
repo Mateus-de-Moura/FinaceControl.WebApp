@@ -22,61 +22,46 @@ export function SectionCards() {
   const dashboard = dashboardQuery.data?.data; 
 
   return (
-    <div className="*:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4 grid grid-cols-1 gap-2 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card lg:px-6">
-      <Card className="card-circles h-26 text-sm">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 lg:px-6 w-full">
+      <Card className="card-circles h-26 text-sm bg-green-500 flex-1">
         <CardHeader className="relative">
-          <CardDescription className="line-clamp-1 flex  font-medium">Receitas</CardDescription>
-          <CardTitle className="@[250px]/card:text-3xl text-2xl  text-blue-500 font-semibold tabular-nums">
+          <CardDescription className="line-clamp-1 flex font-medium text-white">Receitas</CardDescription>
+          <CardTitle className="@[250px]/card:text-3xl text-2xl text-white font-semibold tabular-nums">
             {dashboard?.revenues ??""}
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1 text-sm mt-2">
-          <div className="line-clamp-1 flex gap-2 font-medium">
+          <div className="line-clamp-1 flex gap-2 font-medium text-white">
             Receita total do mês <TrendingUpIcon className="size-4" />
           </div>
         </CardFooter>
       </Card>
 
-      <Card className="card-circles h-26 text-sm">
-        <CardHeader className="relative text-black">
-          <CardDescription className="line-clamp-1 flex  font-medium">Despesas em aberto</CardDescription>
-          <CardTitle className="@[250px]/card:text-3xl mt--3 text-2xl text-red-600 font-semibold tabular-nums">
-            {dashboard?.expensesOpen  ??""}
+      <Card className="card-circles h-26 text-sm bg-red-500 flex-1">
+        <CardHeader className="relative">
+          <CardDescription className="text-white">Despesas</CardDescription>
+          <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold text-white tabular-nums">
+            {dashboard?.expenses ??""}        
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium mt-2">
-            Despesas em aberto para o mês <TrendingDownIcon className="size-4" />
+          <div className="line-clamp-1 flex gap-2 font-medium text-white">
+            Total de despesas para o mês <TrendingDownIcon className="size-4" />
           </div>
         </CardFooter>
       </Card>
 
-      <Card className="card-circles h-26 text-sm">
+      <Card className="card-circles h-26 text-sm bg-blue-500 flex-1">
         <CardHeader className="relative">
-          <CardDescription>Despesas do mes</CardDescription>
-          <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold text-red-600 tabular-nums">
-            {dashboard?.expenses  ??""}        
-          </CardTitle>
-        </CardHeader>
-        <CardFooter className="flex-col items-start gap-1 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            total de despesas para o mes <TrendingDownIcon className="size-4" />
-          </div>
-        </CardFooter>
-      </Card>
-
-      <Card className="card-circles h-26 text-sm" >
-        <CardHeader className="relative">
-          <CardDescription>Saldo em Carteira</CardDescription>
-          <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold text-blue-500 tabular-nums">
+          <CardDescription className="text-white">Saldo em Carteira</CardDescription>
+          <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold text-white tabular-nums">
             {dashboard?.wallet ??""}
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
+          <div className="line-clamp-1 flex gap-2 font-medium text-white">
             Saldo atual em carteira <TrendingUpIcon className="size-4" />
           </div>
-
         </CardFooter>
       </Card>
     </div>

@@ -9,7 +9,7 @@ interface SearchWithDateProps {
   onSearch: (searchText: string, startDate: Date | null, endDate: Date | null) => void;
   initialSearchText?: string;
   initialDateRange?: [Date | null, Date | null];
-  showRangeDate: boolean;
+  showRangeDate?: boolean | null;
 }
 
 export const SearchWithDate = ({

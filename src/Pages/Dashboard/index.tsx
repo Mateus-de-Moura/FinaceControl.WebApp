@@ -66,16 +66,16 @@ export default function Page() {
                 <div className="flex flex-col gap-5 py-4 md:gap-6 md:py-4">
                     <SectionCards />
                 </div>
-                <div className="flex flex-col md:flex-row w-[98%] felx-1">
-                    <div className="w-[70%]">
-                        <div className="pl-6 pr-4 h-screen w-[390px] md:w-full md:h-screen">
-                            <Card className="p-5">
-                                <CardHeader>
+                <div className="flex flex-col md:flex-row w-[98%] flex-1 mb-5 ">
+                    <div className="w-full md:w-[60%] flex">
+                        <div className="pl-3 pr-3 md:pl-6 md:pr-4 w-full flex">
+                            <Card className="p-5 flex flex-col w-full">
+                                <CardHeader className="flex-shrink-0">
                                     <CardTitle>Gestão anual</CardTitle>
                                     <CardDescription>Janeiro - Dezembro</CardDescription>
                                 </CardHeader>
-                                <CardContent>
-                                    <ChartContainer config={chartConfig}>
+                                <CardContent className="flex-1 min-h-0">
+                                    <ChartContainer config={chartConfig} className="h-full">
                                         <BarChart accessibilityLayer data={chartData}>
                                             <CartesianGrid vertical={false} />
                                             <XAxis
@@ -95,7 +95,9 @@ export default function Page() {
                             </Card>
                         </div>
                     </div>
-                    <TransactionCard />
+                    <div className="w-full md:flex-1 flex">
+                        <TransactionCard />
+                    </div>
                 </div>
             </div>
         </div>

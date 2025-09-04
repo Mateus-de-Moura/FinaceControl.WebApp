@@ -40,16 +40,16 @@ const TransactionCard = () => {
     };  
 
     return (
-        <div className="md:w-[50%] md:pr-0 md:pl-0 md:mt-0 md:h-screen">
-            <Card className="p-0  border bg-gradient-to-br from-white to-gray-50/50 backdrop-blur-sm">
-                <div className="p-6 pb-3">
+        <div className="w-full h-full flex px-3 md:px-0">
+            <Card className="p-0 border bg-gradient-to-br from-white to-gray-50/50 backdrop-blur-sm flex flex-col w-full">
+                <div className="p-6 pb-3 flex-shrink-0">
                     <CardTitle className="text-xl font-semibold text-gray-800 flex items-center gap-2">
                         <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                         Últimas Movimentações
                     </CardTitle>
                 </div>
 
-                <CardContent className="px-6 pb-6">
+                <CardContent className="px-6 pb-6 flex-1 min-h-0 flex flex-col">
                     {/* Header da tabela */}
                     <div className="grid grid-cols-12 gap-2 pb-3 mb-4 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wide">
                         <div className="col-span-4 text-start justify-start">Descrição</div>
@@ -58,7 +58,7 @@ const TransactionCard = () => {
                     </div>
 
                     {/* Lista de transações */}
-                    <div className="space-y-5">
+                    <div className="space-y-5 flex-1 min-h-0 overflow-y-auto">
                         {dataTransactions && dataTransactions.map((transaction : any, index: any) => (
                             <div
                                 key={index}
@@ -108,7 +108,7 @@ const TransactionCard = () => {
                     )}
 
                     {/* Footer com resumo */}
-                    <div className=" pt-4 border-t border-gray-200">
+                    <div className="pt-4 border-t border-gray-200 flex-shrink-0">
                         <div className="flex justify-between items-center text-xs text-gray-500">
                             <span>Total de {dataTransactions.length} transações</span>
                             <span className="flex items-center gap-1">
@@ -120,7 +120,7 @@ const TransactionCard = () => {
                         </div>
                     </div>
 
-                    <div className='mt-3 text-blue-700 flex justify-center'>
+                    <div className='mt-3 text-blue-700 flex justify-center flex-shrink-0'>
                         <Link to='/transacoes'>Visualizar todas as transações</Link>
                     </div>
                 </CardContent>
