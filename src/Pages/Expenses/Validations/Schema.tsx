@@ -17,7 +17,7 @@ export const validationSchema = z.object({
         .string({
             required_error: "Valor é obrigatório"
         }),
-      
+
     DueDate: z.string({
         required_error: "Date is required",
     }).refine((val) => !isNaN(Date.parse(val)), {
@@ -30,7 +30,13 @@ export const validationSchema = z.object({
     Status: z.number({
         required_error: "Status is required",
         invalid_type_error: "Status must be a number",
-    })
+    }),
+    ProofPath: z
+        .any()
+        .refine((file) => file instanceof File || file === undefined, {
+            message: "O comprovante precisa ser um arquivo válido",
+        })
+        .optional(),
 });
 
 export type ValidationSchema = z.infer<typeof validationSchema>;

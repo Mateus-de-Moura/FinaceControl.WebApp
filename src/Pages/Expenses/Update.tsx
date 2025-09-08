@@ -19,9 +19,10 @@ import { useParams } from "react-router-dom";
 import { GetAllCategories } from "@/Services/CategoryService";
 import { GetById, UpdateExpense } from "@/Services/ExpenseService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import "jquery-mask-plugin";
+import { Upload, FileImage, FileText } from "lucide-react";
 
 interface Category {
   id: string;
@@ -49,6 +50,7 @@ function Update() {
 
   const successToastId = useMemo(() => "successToastId", []);
   const errorToastId = useMemo(() => "errorToastId", []);
+  const [preview, setPreview] = useState<File | null>(null);
 
   const mutation = useMutation({
     mutationFn: UpdateExpense,
@@ -89,12 +91,25 @@ function Update() {
   const statusValue = watch("Status");
   const statusString = statusValue !== undefined && statusValue !== null ? statusValue.toString() : "0";
 
-  const onSubmit = async (data: any) => {
-    const { ...rest } = data;  
-    mutation.mutate({
-      ...rest,
-    });
-  };
+const onSubmit = async (data: any) => {
+  const formData = new FormData();
+
+  formData.append("Description", data.Description);
+  formData.append("Recurrent", String(data.Recurrent));
+  formData.append("Active", String(data.Active));
+  formData.append("IdExpense", data.IdExpense);
+  formData.append("Value", data.Value);
+  formData.append("DueDate", data.DueDate);
+  formData.append("Status", String(data.Status));
+  formData.append("CategoryId", data.CategoryId);
+
+  if (data.ProofFile) {
+    formData.append("ProofFile", data.ProofFile); 
+  }
+
+  mutation.mutate(formData);
+};
+
 
   const onError = (errors: any) => {
     console.log("form errors", errors);
@@ -115,8 +130,9 @@ function Update() {
       setValue("DueDate", formattedDate);
 
       setValue("Value", expense.value.toString());
+      setValue("ProofFile", null);
     }
-  }, [expense,rolesQuery.isSuccess, rolesQuery.isFetching, setValue]);
+  }, [expense, rolesQuery.isSuccess, rolesQuery.isFetching, setValue]);
 
   return (
     <div className="p-5">
@@ -245,6 +261,69 @@ function Update() {
                 </Select>
               </div>
             </div>
+            {statusValue === 1 && (
+              <div className="flex flex-col gap-2 mt-3">
+                <label className="font-semibold">Comprovante de Pagamento</label>
+
+                <div className="flex items-center gap-3">
+                  {/* Mostrar botão de upload só se não tiver preview */}
+                  {!preview && (
+                    <>
+                      <label
+                        htmlFor="proof-upload"
+                        className="flex items-center justify-center w-12 h-12 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-100"
+                      >
+                        <Upload className="w-6 h-6 text-gray-500" />
+                      </label>
+                      <input
+                        id="proof-upload"
+                        type="file"
+                        accept="image/*,application/pdf"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setPreview(file);
+                            setValue("ProofFile", file, { shouldValidate: true }); // <-- agora é ProofFile
+                          }
+                        }}
+                      />
+
+                    </>
+                  )}
+
+                  {/* Preview */}
+                  {preview && (
+                    <div className="flex items-center gap-2 border rounded-lg p-2">
+                      {preview.type.includes("pdf") ? (
+                        <FileText className="w-8 h-8 text-red-500" />
+                      ) : (
+                        <img
+                          src={URL.createObjectURL(preview)}
+                          alt="preview"
+                          className="w-12 h-12 object-cover rounded-lg border"
+                        />
+                      )}
+                      <span className="text-sm text-gray-600 truncate max-w-[150px]">
+                        {preview.name}
+                      </span>
+
+                      {/* Botão para remover */}
+                      <button
+                        type="button"
+                        className="ml-2 text-red-500 hover:text-red-700 font-bold"
+                        onClick={() => setPreview(null)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* <p className="text-red-500">{errors.ProofPath?.message}</p> */}
+              </div>
+            )}
+
 
             <div className="w-[100%] mt-3 flex justify-between">
               <Button type="submit" variant="secondary">

@@ -60,7 +60,7 @@ export function NavUser({
   const storedData = localStorage.getItem('loginData');
   var data = JSON.parse(storedData!) as AuthUser;
   let photo = "";
-  const isUrl = data.photo.startsWith('https');
+  const isUrl = (data.photo || "").startsWith("https");
 
   if (isUrl)
     photo = data.photo;

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const validationSchemaExpenseUpdate = z.object({
-      IdExpense: z.string({
+    IdExpense: z.string({
         required_error: "Id is required",
         invalid_type_error: "Id must be a string",
     }),
@@ -21,7 +21,7 @@ export const validationSchemaExpenseUpdate = z.object({
         .string({
             required_error: "Valor é obrigatório"
         }),
-      
+
     DueDate: z.string({
         required_error: "Date is required",
     }).refine((val) => !isNaN(Date.parse(val)), {
@@ -31,7 +31,14 @@ export const validationSchemaExpenseUpdate = z.object({
         required_error: "CategoryId is required",
         invalid_type_error: "CategoryId must be a string",
     }),
-    Status: z.number().optional()
+    Status: z.number().optional(),
+    ProofFile: z
+        .any()
+        .refine((file) => !file || file instanceof File, {
+            message: "O comprovante precisa ser um arquivo válido",
+        })
+        .optional(),
+
 });
 
 export type ValidationSchemaExpenseUpdate = z.infer<typeof validationSchemaExpenseUpdate>;

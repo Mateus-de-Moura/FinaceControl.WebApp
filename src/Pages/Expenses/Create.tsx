@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/select"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Card, CardContent } from "@/components/ui/card"
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { GetAllCategories } from '@/Services/CategoryService';
@@ -17,6 +17,7 @@ import { useQuery } from '@tanstack/react-query';
 import 'jquery-mask-plugin';
 import { ValidationSchema, validationSchema } from './Validations/Schema';
 import { CreateExpense } from '@/Services/ExpenseService';
+import { Upload,  FileText } from "lucide-react";
 
 interface Category {
     id: string;
@@ -31,6 +32,7 @@ function Create() {
 
     const successToastId = useMemo(() => 'successToastId', []);
     const errorToastId = useMemo(() => 'errorToastId', []);
+      const [preview, setPreview] = useState<File | null>(null);
 
     const mutation = useMutation({
         mutationFn: CreateExpense,
@@ -52,13 +54,15 @@ function Create() {
         }
     })
 
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<ValidationSchema>({
+    const { register, handleSubmit, setValue, watch ,formState: { errors } } = useForm<ValidationSchema>({
         resolver: zodResolver(validationSchema),
         defaultValues: {
             Active: true,
             Recurrent: false,
         }
     });
+
+    const statusValue = watch("Status");
 
     const onSubmit = async (data: any) => {
         const { ...rest } = data;
@@ -177,6 +181,67 @@ function Create() {
                                 </Select>
                             </div>
                         </div>
+                        {statusValue === 1 && (
+                            <div className="flex flex-col gap-2 mt-3">
+                                <label className="font-semibold">Comprovante de Pagamento</label>
+
+                                <div className="flex items-center gap-3">
+                                    {/* Mostrar botão de upload só se não tiver preview */}
+                                    {!preview && (
+                                        <>
+                                            <label
+                                                htmlFor="proof-upload"
+                                                className="flex items-center justify-center w-12 h-12 border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-100"
+                                            >
+                                                <Upload className="w-6 h-6 text-gray-500" />
+                                            </label>
+                                            <input
+                                                id="proof-upload"
+                                                type="file"
+                                                accept="image/*,application/pdf"
+                                                className="hidden"
+                                                {...register("ProofPath")}
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                        setPreview(file);
+                                                    }
+                                                }}
+                                            />
+                                        </>
+                                    )}
+
+                                    {/* Preview */}
+                                    {preview && (
+                                        <div className="flex items-center gap-2 border rounded-lg p-2">
+                                            {preview.type.includes("pdf") ? (
+                                                <FileText className="w-8 h-8 text-red-500" />
+                                            ) : (
+                                                <img
+                                                    src={URL.createObjectURL(preview)}
+                                                    alt="preview"
+                                                    className="w-12 h-12 object-cover rounded-lg border"
+                                                />
+                                            )}
+                                            <span className="text-sm text-gray-600 truncate max-w-[150px]">
+                                                {preview.name}
+                                            </span>
+
+                                            {/* Botão para remover */}
+                                            <button
+                                                type="button"
+                                                className="ml-2 text-red-500 hover:text-red-700 font-bold"
+                                                onClick={() => setPreview(null)}
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* <p className="text-red-500">{errors.ProofPath?.message}</p> */}
+                            </div>
+                        )}
 
                         <div className="w-[100%] mt-3 flex justify-between">
                             <Button type="submit" variant="secondary">Salvar</Button>
