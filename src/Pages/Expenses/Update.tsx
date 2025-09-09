@@ -22,7 +22,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import "jquery-mask-plugin";
-import { Upload, FileImage, FileText } from "lucide-react";
+import { Upload, FileText } from "lucide-react";
+import { Download } from "lucide-react";
 
 interface Category {
   id: string;
@@ -50,7 +51,8 @@ function Update() {
 
   const successToastId = useMemo(() => "successToastId", []);
   const errorToastId = useMemo(() => "errorToastId", []);
-  const [preview, setPreview] = useState<File | null>(null);
+
+  const [preview, setPreview] = useState<{ src: string; type: string } | File | null>(null);
 
   const mutation = useMutation({
     mutationFn: UpdateExpense,
@@ -84,38 +86,41 @@ function Update() {
     defaultValues: {
       Active: true,
       Recurrent: false,
-      Status: 0
+      Status: 0,
     },
   });
 
   const statusValue = watch("Status");
-  const statusString = statusValue !== undefined && statusValue !== null ? statusValue.toString() : "0";
+  const statusString =
+    statusValue !== undefined && statusValue !== null
+      ? statusValue.toString()
+      : "0";
 
-const onSubmit = async (data: any) => {
-  const formData = new FormData();
+  const onSubmit = async (data: any) => {
+    const formData = new FormData();
 
-  formData.append("Description", data.Description);
-  formData.append("Recurrent", String(data.Recurrent));
-  formData.append("Active", String(data.Active));
-  formData.append("IdExpense", data.IdExpense);
-  formData.append("Value", data.Value);
-  formData.append("DueDate", data.DueDate);
-  formData.append("Status", String(data.Status));
-  formData.append("CategoryId", data.CategoryId);
+    formData.append("Description", data.Description);
+    formData.append("Recurrent", String(data.Recurrent));
+    formData.append("Active", String(data.Active));
+    formData.append("IdExpense", data.IdExpense);
+    formData.append("Value", data.Value);
+    formData.append("DueDate", data.DueDate);
+    formData.append("Status", String(data.Status));
+    formData.append("CategoryId", data.CategoryId);
 
-  if (data.ProofFile) {
-    formData.append("ProofFile", data.ProofFile); 
-  }
+    if (data.ProofFile) {
+      formData.append("ProofFile", data.ProofFile);
+    }
 
-  mutation.mutate(formData);
-};
-
+    mutation.mutate(formData);
+  };
 
   const onError = (errors: any) => {
     console.log("form errors", errors);
   };
 
   useEffect(() => {
+    setPreview(null);
     if (expense && rolesQuery.isSuccess && !rolesQuery.isFetching) {
       setValue("IdExpense", expense.id);
       setValue("Active", expense.active);
@@ -123,7 +128,6 @@ const onSubmit = async (data: any) => {
       setValue("Description", expense.description);
       setValue("CategoryId", expense.categoryId);
       setValue("Status", expense.status);
-      setValue("DueDate", expense.dueDate);
 
       const date = new Date(expense.dueDate);
       const formattedDate = date.toISOString().split("T")[0];
@@ -131,6 +135,16 @@ const onSubmit = async (data: any) => {
 
       setValue("Value", expense.value.toString());
       setValue("ProofFile", null);
+
+      if (expense.file) {
+        setPreview({
+          src: `data:${expense.fileType};base64,${expense.file}`,
+          type: expense.fileType,
+        });
+      }
+      else {
+        setPreview(null);
+      }
     }
   }, [expense, rolesQuery.isSuccess, rolesQuery.isFetching, setValue]);
 
@@ -191,7 +205,7 @@ const onSubmit = async (data: any) => {
               <div className="w-[50%]">
                 <label className="font-semibold">Categoria *</label>
                 <Select
-                  value={watch('CategoryId')}
+                  value={watch("CategoryId")}
                   {...register("CategoryId")}
                   onValueChange={(value) => setValue("CategoryId", value)}
                 >
@@ -221,18 +235,14 @@ const onSubmit = async (data: any) => {
             <div className="flex gap-4">
               <div className="w-[24%]">
                 <label className="font-semibold">Data de Vencimento *</label>
-                <Input
-                  {...register("DueDate")}
-                  type="Date"
-                  placeholder="Nickname do usuário"
-                />
+                <Input {...register("DueDate")} type="Date" />
                 <p className="text-red-500">{errors.DueDate?.message}</p>
               </div>
 
               <div className="w-[24%] gap-1">
                 <label className="mb-1 font-semibold">Valor *</label>
                 <Input
-                  {...register('Value', { required: 'Valor é obrigatório' })}
+                  {...register("Value", { required: "Valor é obrigatório" })}
                   type="text"
                   className="money-mask"
                 />
@@ -242,7 +252,9 @@ const onSubmit = async (data: any) => {
                 <label className="font-semibold">Status </label>
                 <Select
                   value={statusString}
-                  onValueChange={(value) => setValue("Status", parseInt(value))}
+                  onValueChange={(value) =>
+                    setValue("Status", parseInt(value))
+                  }
                 >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Selecione um status" />
@@ -261,12 +273,12 @@ const onSubmit = async (data: any) => {
                 </Select>
               </div>
             </div>
+
             {statusValue === 1 && (
               <div className="flex flex-col gap-2 mt-3">
                 <label className="font-semibold">Comprovante de Pagamento</label>
 
                 <div className="flex items-center gap-3">
-                  {/* Mostrar botão de upload só se não tiver preview */}
                   {!preview && (
                     <>
                       <label
@@ -284,31 +296,53 @@ const onSubmit = async (data: any) => {
                           const file = e.target.files?.[0];
                           if (file) {
                             setPreview(file);
-                            setValue("ProofFile", file, { shouldValidate: true }); // <-- agora é ProofFile
+                            setValue("ProofFile", file, {
+                              shouldValidate: true,
+                            });
                           }
                         }}
                       />
-
                     </>
                   )}
 
-                  {/* Preview */}
                   {preview && (
-                    <div className="flex items-center gap-2 border rounded-lg p-2">
-                      {preview.type.includes("pdf") ? (
+                    <div className="flex items-center gap-2 border rounded-lg p-2">                    
+                      {preview instanceof File ? (
+                        preview.type.includes("pdf") ? (
+                          <FileText className="w-8 h-8 text-red-500" />
+                        ) : (
+                          <img
+                            src={URL.createObjectURL(preview)}
+                            alt="preview"
+                            className="w-12 h-12 object-cover rounded-lg border"
+                          />
+                        )
+                      ) : preview.type === "application/pdf" ? (
                         <FileText className="w-8 h-8 text-red-500" />
                       ) : (
                         <img
-                          src={URL.createObjectURL(preview)}
+                          src={preview.src}
                           alt="preview"
                           className="w-12 h-12 object-cover rounded-lg border"
                         />
                       )}
+                   
                       <span className="text-sm text-gray-600 truncate max-w-[150px]">
-                        {preview.name}
+                        {preview instanceof File ? preview.name : "Comprovante"}
                       </span>
-
-                      {/* Botão para remover */}
+                   
+                      <a
+                        href={
+                          preview instanceof File
+                            ? URL.createObjectURL(preview)
+                            : preview.src 
+                        }
+                        download={preview instanceof File ? preview.name : "comprovante"}
+                        className="ml-2 text-blue-500 hover:text-blue-700 font-bold"
+                      >
+                       <Download className="w-5 h-5" />
+                      </a>
+                    
                       <button
                         type="button"
                         className="ml-2 text-red-500 hover:text-red-700 font-bold"
@@ -318,12 +352,10 @@ const onSubmit = async (data: any) => {
                       </button>
                     </div>
                   )}
-                </div>
 
-                {/* <p className="text-red-500">{errors.ProofPath?.message}</p> */}
+                </div>
               </div>
             )}
-
 
             <div className="w-[100%] mt-3 flex justify-between">
               <Button type="submit" variant="secondary">
@@ -334,7 +366,7 @@ const onSubmit = async (data: any) => {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 export default Update;

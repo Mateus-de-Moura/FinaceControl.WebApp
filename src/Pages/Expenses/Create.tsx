@@ -17,7 +17,7 @@ import { useQuery } from '@tanstack/react-query';
 import 'jquery-mask-plugin';
 import { ValidationSchema, validationSchema } from './Validations/Schema';
 import { CreateExpense } from '@/Services/ExpenseService';
-import { Upload,  FileText } from "lucide-react";
+import { Upload, FileText } from "lucide-react";
 
 interface Category {
     id: string;
@@ -32,7 +32,7 @@ function Create() {
 
     const successToastId = useMemo(() => 'successToastId', []);
     const errorToastId = useMemo(() => 'errorToastId', []);
-      const [preview, setPreview] = useState<File | null>(null);
+    const [preview, setPreview] = useState<File | null>(null);
 
     const mutation = useMutation({
         mutationFn: CreateExpense,
@@ -54,7 +54,7 @@ function Create() {
         }
     })
 
-    const { register, handleSubmit, setValue, watch ,formState: { errors } } = useForm<ValidationSchema>({
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<ValidationSchema>({
         resolver: zodResolver(validationSchema),
         defaultValues: {
             Active: true,
@@ -65,12 +65,22 @@ function Create() {
     const statusValue = watch("Status");
 
     const onSubmit = async (data: any) => {
-        const { ...rest } = data;
+        const formData = new FormData();
 
-        console.log(data);
-        mutation.mutate({
-            ...rest,
-        });
+        formData.append("Description", data.Description);
+        formData.append("Recurrent", String(data.Recurrent));
+        formData.append("Active", String(data.Active));
+        formData.append("IdExpense", data.IdExpense);
+        formData.append("Value", data.Value);
+        formData.append("DueDate", data.DueDate);
+        formData.append("Status", String(data.Status));
+        formData.append("CategoryId", data.CategoryId);
+
+        if (data.ProofFile) {
+            formData.append("ProofFile", data.ProofFile);
+        }
+
+        mutation.mutate(formData);
     };
 
     const onError = (errors: any) => {
@@ -200,14 +210,15 @@ function Create() {
                                                 type="file"
                                                 accept="image/*,application/pdf"
                                                 className="hidden"
-                                                {...register("ProofPath")}
                                                 onChange={(e) => {
                                                     const file = e.target.files?.[0];
                                                     if (file) {
                                                         setPreview(file);
+                                                        setValue("ProofFile", file, { shouldValidate: true }); // <-- agora é ProofFile
                                                     }
                                                 }}
                                             />
+
                                         </>
                                     )}
 
@@ -237,9 +248,7 @@ function Create() {
                                             </button>
                                         </div>
                                     )}
-                                </div>
-
-                                {/* <p className="text-red-500">{errors.ProofPath?.message}</p> */}
+                                </div>                              
                             </div>
                         )}
 

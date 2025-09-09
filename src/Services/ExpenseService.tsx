@@ -31,7 +31,6 @@ export function CreateExpense(expense: any) {
   return Api.post('/api/Expense', expense);
 }
 export function UpdateExpense(expense: any) {
-  console.log(expense);
   return Api.put('/api/Expense', expense);
 }
 

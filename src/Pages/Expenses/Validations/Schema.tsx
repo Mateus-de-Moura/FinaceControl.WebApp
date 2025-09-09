@@ -31,9 +31,9 @@ export const validationSchema = z.object({
         required_error: "Status is required",
         invalid_type_error: "Status must be a number",
     }),
-    ProofPath: z
+     ProofFile: z
         .any()
-        .refine((file) => file instanceof File || file === undefined, {
+        .refine((file) => !file || file instanceof File, {
             message: "O comprovante precisa ser um arquivo válido",
         })
         .optional(),
