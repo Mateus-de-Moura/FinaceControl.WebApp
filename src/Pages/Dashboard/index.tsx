@@ -24,7 +24,7 @@ import { Group } from 'lucide-react';
 const chartConfig = {
     desktop: {
         label: "Receitas",
-        color: "rgb(46, 107, 240)",
+        color: "#3EC850",
     },
     mobile: {
         label: "Despesas",
