@@ -62,7 +62,7 @@ const TransactionCard = () => {
                         {dataTransactions && dataTransactions.map((transaction : any, index: any) => (
                             <div
                                 key={index}
-                                className="grid grid-cols-12 gap-3 p-3 rounded-lg hover:bg-gray-50/80 transition-all duration-200 group border border-transparent hover:border-gray-200 hover:shadow-sm"
+                                className="grid grid-cols-12  pl-1"
                             >
                                 {/* Descrição com ícone */}
                                 <div className="col-span-5 flex items-start justify-start gap-2">
