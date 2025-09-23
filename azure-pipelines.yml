@@ -6,7 +6,7 @@ pool:
 
 variables:
   nodeVersion: '18.x'
-  buildDir: 'build'  # ou 'dist' se usar Vite
+  buildDir: 'dist'  # ou 'dist' se usar Vite
   destinationPath: 'C:\Users\Mateus\Desktop\PublishWeb' 
 
 steps:
