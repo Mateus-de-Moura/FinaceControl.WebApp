@@ -1,19 +1,38 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- main
+- main  
 
 pool:
-  name: default
+  name: default 
+
+variables:
+  nodeVersion: '18.x'
+  buildDir: 'build'  # ou 'dist' se usar Vite
+  destinationPath: 'C:\Users\Mateus\Desktop\PublishWeb' 
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- task: NodeTool@0
+  displayName: 'Instalar Node.js'
+  inputs:
+    versionSpec: '$(nodeVersion)'
+    checkLatest: true
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    npm install
+  displayName: 'Instalar dependências'
+
+- script: |
+    npm run build
+  displayName: 'Executar build do React'
+
+- powershell: |
+    $source = "$(System.DefaultWorkingDirectory)\$(buildDir)"
+    $destination = "$(destinationPath)"
+
+    if (!(Test-Path -Path $destination)) {
+      New-Item -ItemType Directory -Path $destination | Out-Null
+    }
+
+    Copy-Item -Path "$source\*" -Destination $destination -Recurse -Force
+
+    Write-Host "Build do React copiado com sucesso para: $destination"
+  displayName: 'Copiar build para IIS'
