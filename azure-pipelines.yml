@@ -6,8 +6,9 @@ pool:
 
 variables:
   nodeVersion: '18.x'
-  buildDir: 'dist'  # ou 'dist' se usar Vite
+  buildDir: 'dist'  
   destinationPath: 'C:\Users\Mateus\Desktop\PublishWeb' 
+  viteApiUrl: 'http://192.168.18.198:8080/'  
 
 steps:
 - task: NodeTool@0
@@ -20,9 +21,14 @@ steps:
     npm install
   displayName: 'Instalar dependências'
 
+- powershell: |
+    $envContent = "VITE_API_URL=$(viteApiUrl)"
+    Set-Content -Path "$(System.DefaultWorkingDirectory)\.env.production" -Value $envContent -Encoding UTF8
+  displayName: 'Criar .env.production com URL da API'
+
 - script: |
     npm run build
-  displayName: 'Executar build do React'
+  displayName: 'Executar build do React (Vite)'
 
 - powershell: |
     $webConfigPath = "$(System.DefaultWorkingDirectory)\$(buildDir)\web.config"
@@ -39,7 +45,7 @@ steps:
       '            <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />'
       '            <add input="{REQUEST_URI}" pattern="^/(api)" negate="true" />'
       '          </conditions>'
-      '          <action type="Rewrite" url="/" />'
+      '          <action type="Rewrite" url="/index.html" />'
       '        </rule>'
       '      </rules>'
       '    </rewrite>'
