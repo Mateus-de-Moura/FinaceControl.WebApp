@@ -18,6 +18,7 @@ import 'jquery-mask-plugin';
 import { ValidationSchema, validationSchema } from './Validations/Schema';
 import { CreateExpense } from '@/Services/ExpenseService';
 import { Upload, FileText } from "lucide-react";
+import { NumericFormat } from 'react-number-format';
 
 interface Category {
     id: string;
@@ -70,8 +71,15 @@ function Create() {
         formData.append("Description", data.Description);
         formData.append("Recurrent", String(data.Recurrent));
         formData.append("Active", String(data.Active));
-        formData.append("IdExpense", data.IdExpense);
-        formData.append("Value", data.Value);
+        formData.append("IdExpense", data.IdExpense);        
+        
+        if (data.Value) {            
+            const valueAsNumber = parseFloat(data.Value);         
+            formData.append("Value", valueAsNumber.toString().replace('.', ','));
+        } else {
+            formData.append("Value", data.Value);
+        }
+        
         formData.append("DueDate", data.DueDate);
         formData.append("Status", String(data.Status));
         formData.append("CategoryId", data.CategoryId);
@@ -161,10 +169,16 @@ function Create() {
 
                             <div className="w-[24%] gap-1">
                                 <label className='mb-1 font-semibold'>Valor *</label>
-                                <Input
-                                    {...register('Value', { required: 'Valor é obrigatório' })}
-                                    type="text"
-                                    className="money-mask"
+                                <NumericFormat
+                                    thousandSeparator="."
+                                    decimalSeparator=","
+                                    decimalScale={2}
+                                    fixedDecimalScale
+                                    customInput={Input}
+                                    allowNegative={false}
+                                    onValueChange={(values) => {
+                                        setValue('Value', String(values.value));
+                                    }}
                                 />
                                 <p className='text-red-500'>{errors.Value?.message}</p>
                             </div>

@@ -184,7 +184,9 @@ function Index() {
         </div>
 
         <div className="mt-3 mb-3 h-full">
-          <DataTable columns={usersColumns} data={data} />
+          <div className={`transition-opacity duration-300 ease-in-out ${usersQuery.isLoading ? 'opacity-50' : 'opacity-100'}`}>
+            <DataTable columns={usersColumns} data={data} />
+          </div>
         </div>
 
         <div className="pl-6 pr-6 mt-5">

@@ -138,7 +138,9 @@ function Index() {
         </div>
 
         <div className="mt-3 mb-3 h-full">
-          <DataTable columns={categoryColumns} data={data} />
+          <div className={`transition-all duration-500 ease-in-out ${categoriesQuery.isLoading ? 'opacity-40 blur-[1px]' : 'opacity-100 blur-0'}`}>
+            <DataTable columns={categoryColumns} data={data} />
+          </div>
         </div>
         <div className="pl-6 pr-6 mt-5">
           <Pagination>

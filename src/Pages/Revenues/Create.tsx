@@ -16,6 +16,7 @@ import { CreateRevenues } from '@/Services/RevenuesService';
 import { GetAllCategories } from '@/Services/CategoryService';
 import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
+import { NumericFormat } from 'react-number-format';
 
 interface Category {
     id: string;
@@ -61,7 +62,11 @@ function Create() {
 
     const onSubmit = async (data: any) => {
         const { ...rest } = data;
-
+       
+        if (rest.Value) {            
+            const valueAsNumber = parseFloat(rest.Value);
+            rest.Value = valueAsNumber.toFixed(2);
+        }
 
         mutation.mutate({
             ...rest,
@@ -150,10 +155,16 @@ function Create() {
 
                             <div className="w-[24%] gap-1">
                                 <label className='mb-1 font-semibold'>Valor *</label>
-                                <Input
-                                    {...register('Value', { required: 'Valor é obrigatório' })}
-                                    type="text"
-                                    className="money-mask"
+                                <NumericFormat
+                                    thousandSeparator="."
+                                    decimalSeparator=","
+                                    decimalScale={2}
+                                    fixedDecimalScale
+                                    customInput={Input}
+                                    allowNegative={false}
+                                    onValueChange={(values) => {
+                                        setValue('Value', String(values.value));
+                                    }}
                                 />                   
                                 <p className='text-red-500'>{errors.Value?.message}</p>
                             </div>
