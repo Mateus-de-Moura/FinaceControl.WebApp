@@ -6,6 +6,7 @@ export interface AuthUser {
   name: string;
   email: string;
   tokenJwt: string;
+  refreshToken: string;
   username: string;
   photo: string;
   responseInfo: responseInfo | null
@@ -24,27 +25,50 @@ interface LoginUserCommand {
   longitude?: string;
 }
 
-export const fetchAuthUser = async (email: string, password: string) => {
-  const loginData: LoginUserCommand = {
-    email,
-    password,
-  };
+const authService = {
+  login: async (email: string, password: string) => {
+    const loginData: LoginUserCommand = {
+      email,
+      password,
+    };
 
-  try {
-    const response = await Api.post<AuthUser>("/Auth/Login", loginData);
+    try {
+      const response = await Api.post<AuthUser>("/Auth/Login", loginData);
+      
+      localStorage.setItem('loginData', JSON.stringify(response.data));
+      await fetchLocationData(email, true);
+      return response.data;
+
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.responseInfo?.errorDescription || "Erro desconhecido";
+      await fetchLocationData(email, false);
+      throw new Error(errorMessage);
+    }
+  },
+
+  logout: async () => {
+    const response = await Api.post("/auth/logout");
+    return response.data;
+  },
+
+  refreshToken: async (email: string, refreshToken: string) => {
+    const response = await Api.post("/auth/Refresh-Token", {
+      usernameOrEmail: email,
+      refreshToken: refreshToken
+    });
 
     localStorage.setItem('loginData', JSON.stringify(response.data));
-    await fetchLocationData(email, true);
     return response.data;
+  },
 
-  } catch (error: any) {
-
-    const errorMessage = error.response.data?.responseInfo?.errorDescription || "Erro desconhecido";
-    await fetchLocationData(email, false);
-    throw new Error(errorMessage);
-
+  checkUserIsAuth: async () => {
+    const response = await Api.get("/auth/user-info");
+    return response.data;
   }
 };
+
+export const fetchAuthUser = authService.login;
+export default authService;
 
 
 

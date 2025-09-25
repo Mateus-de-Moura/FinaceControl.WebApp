@@ -1,8 +1,12 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
 export interface AuthUser {
-  email: string;
+  id: string;
   name: string;
+  email: string;
+  tokenJwt: string;
+  refreshToken: string;
+  username: string;
   photo: string;
 }
 
@@ -12,6 +16,7 @@ interface AuthContextType {
   updatePhoto: (newPhotoBase64: string) => void;
   login: (userData: AuthUser) => void;
   logout: () => void;
+  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,11 +27,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return stored ? JSON.parse(stored) : null;
   });
 
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return user !== null;
+  });
+
   useEffect(() => {
     if (user) {
       localStorage.setItem('loginData', JSON.stringify(user)); 
+      setIsAuthenticated(true);
     } else {
       localStorage.removeItem('loginData'); 
+      setIsAuthenticated(false);
     }
   }, [user]);
 
@@ -47,7 +58,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, updatePhoto, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser, updatePhoto, login, logout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

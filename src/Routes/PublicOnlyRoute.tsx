@@ -1,13 +1,14 @@
-import { Navigate } from "react-router";
-import { ReactNode, useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import authService from "@/Services/authService";
+import type { ReactNode } from "react";
 import Spinner from "@/components/ui/Spinner";
 
-interface PrivateRouteProps {
+interface PublicOnlyRouteProps {
   children: ReactNode;
 }
 
-export function PrivateRoute({ children }: PrivateRouteProps) {
+export function PublicOnlyRoute({ children }: PublicOnlyRouteProps) {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -30,8 +31,8 @@ export function PrivateRoute({ children }: PrivateRouteProps) {
           setIsAuthenticated(true);
         }
         else{
-          setIsAuthenticated(false);
           localStorage.removeItem('loginData');
+          setIsAuthenticated(false);
         }
       } catch (err) {
         setIsAuthenticated(false);
@@ -46,5 +47,5 @@ export function PrivateRoute({ children }: PrivateRouteProps) {
 
   if (loading) return <Spinner />;
 
-  return isAuthenticated ? children : <Navigate to="/" />;
+  return isAuthenticated ? <Navigate to="/home" /> : children;
 }

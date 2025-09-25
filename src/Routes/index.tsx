@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router";
 import Signin from "../Pages/Auth/Signin"
 import Dasboard from '../Pages/Dashboard/index'
 import { PrivateRoute } from "./PrivateRoute";
+import { PublicOnlyRoute } from "./PublicOnlyRoute";
 import Users from '../Pages/Users'
 import { AppSidebar } from "@/components/ui/app-sidebar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
@@ -46,7 +47,10 @@ function index() {
   return (
 
     <Routes>
-      <Route path="/" element={<Signin />} />
+      <Route path="/" element={
+        <PublicOnlyRoute>
+          <Signin />
+        </PublicOnlyRoute>} />
       <Route path="/home" element={
         <PrivateRoute>
           <LayoutWithSidebar>
