@@ -42,7 +42,6 @@ function LayoutWithSidebar({ children }: LayoutWithSidebarProps) {
   );
 }
 
-
 function index() {
   return (
 
