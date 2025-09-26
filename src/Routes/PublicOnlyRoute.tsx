@@ -21,13 +21,12 @@ export function PublicOnlyRoute({ children }: PublicOnlyRouteProps) {
 
         if(response.authenticated){
           localStorage.setItem('loginData', JSON.stringify(response.user));
-      
+          setIsAuthenticated(true);
         }
         else{
           localStorage.removeItem('loginData');
+          setIsAuthenticated(false);
         }
-
-        setIsAuthenticated(true);
       } catch (err) {
         setIsAuthenticated(false);
       } finally {
