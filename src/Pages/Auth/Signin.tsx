@@ -24,12 +24,11 @@ function Signin() {
   const { mutate: loginUser, isPending } = useLoginUser(email, password);
 
   const handleLoginSuccess = (data: any) => {
-    setUser(data)
-    localStorage.setItem('Logado', 'Logado');
+    setUser(data)    
     navigate('/home');
   };
 
-  const handleLoginError = () => {
+  const handleLoginError = () => {   
     setEmailInvalid(true);
   };
 

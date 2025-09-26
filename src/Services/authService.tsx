@@ -31,19 +31,9 @@ const authService = {
       email,
       password,
     };
-
-    try {
-      const response = await Api.post<AuthUser>("/Auth/Login", loginData);
-      
-      localStorage.setItem('loginData', JSON.stringify(response.data));
-      await fetchLocationData(email, true);
-      return response.data;
-
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.responseInfo?.errorDescription || "Erro desconhecido";
-      await fetchLocationData(email, false);
-      throw new Error(errorMessage);
-    }
+    const response = await Api.post<AuthUser>("/Auth/Login", loginData);
+    await fetchLocationData(email, true);
+    return response.data;
   },
 
   logout: async () => {

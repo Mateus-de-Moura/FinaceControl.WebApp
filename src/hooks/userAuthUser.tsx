@@ -5,7 +5,7 @@ import { AuthUser } from "@/common/Interfaces/AuthUser.d";
 export function useLoginUser(email: string, password: string) {
   return useMutation<AuthUser, Error>({
     mutationFn: async () => {   
-      const user = await fetchAuthUser(email, password);
+      const user = await fetchAuthUser(email, password);    
       return user;
     },
   });

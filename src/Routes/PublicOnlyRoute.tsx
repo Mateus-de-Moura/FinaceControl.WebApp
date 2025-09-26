@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import authService from "@/Services/authService";
+import authService from "@/Services/authService"; 
 import type { ReactNode } from "react";
 import Spinner from "@/components/ui/Spinner";
 
@@ -15,28 +15,21 @@ export function PublicOnlyRoute({ children }: PublicOnlyRouteProps) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Verifica se há dados no localStorage primeiro
-        const storedData = localStorage.getItem('loginData');
-        if (!storedData) {
-          setIsAuthenticated(false);
-          setLoading(false);
-          return;
-        }
+        var response = await authService.checkUserIsAuth();      
 
-        // Se há dados, verifica com o backend se ainda é válido
-        const response = await authService.checkUserIsAuth();      
+       console.log(response)
 
         if(response.authenticated){
           localStorage.setItem('loginData', JSON.stringify(response.user));
-          setIsAuthenticated(true);
+      
         }
         else{
           localStorage.removeItem('loginData');
-          setIsAuthenticated(false);
         }
+
+        setIsAuthenticated(true);
       } catch (err) {
         setIsAuthenticated(false);
-        localStorage.removeItem('loginData');
       } finally {
         setLoading(false);
       }

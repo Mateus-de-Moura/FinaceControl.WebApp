@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router";
 import Signin from "../Pages/Auth/Signin"
 import Dasboard from '../Pages/Dashboard/index'
 import { PrivateRoute } from "./PrivateRoute";
-import { PublicOnlyRoute } from "./PublicOnlyRoute";
 import Users from '../Pages/Users'
 import { AppSidebar } from "@/components/ui/app-sidebar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
@@ -25,6 +24,7 @@ import Transaction from '@/Pages/Transactions/index'
 import TransactionsCreate from '@/Pages/Transactions/Create'
 import TransactionsUpdate from '@/Pages/Transactions/Update'
 import AuthCallback from "@/Pages/Auth/AuthCallback";
+import { PublicOnlyRoute } from "./PublicOnlyRoute";
 
 interface LayoutWithSidebarProps {
   children: ReactNode;
@@ -51,6 +51,7 @@ function index() {
         <PublicOnlyRoute>
           <Signin />
         </PublicOnlyRoute>} />
+        
       <Route path="/home" element={
         <PrivateRoute>
           <LayoutWithSidebar>

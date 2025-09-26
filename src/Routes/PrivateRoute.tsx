@@ -1,50 +1,12 @@
 import { Navigate } from "react-router";
-import { ReactNode, useEffect, useState } from "react";
-import authService from "@/Services/authService";
-import Spinner from "@/components/ui/Spinner";
+import type { ReactNode } from "react";
 
 interface PrivateRouteProps {
   children: ReactNode;
 }
 
 export function PrivateRoute({ children }: PrivateRouteProps) {
-  const [loading, setLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const user = localStorage.getItem('loginData');
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // Verifica se há dados no localStorage primeiro
-        const storedData = localStorage.getItem('loginData');
-        if (!storedData) {
-          setIsAuthenticated(false);
-          setLoading(false);
-          return;
-        }
-
-        // Se há dados, verifica com o backend se ainda é válido
-        const response = await authService.checkUserIsAuth();      
-
-        if(response.authenticated){
-          localStorage.setItem('loginData', JSON.stringify(response.user));
-          setIsAuthenticated(true);
-        }
-        else{
-          setIsAuthenticated(false);
-          localStorage.removeItem('loginData');
-        }
-      } catch (err) {
-        setIsAuthenticated(false);
-        localStorage.removeItem('loginData');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
-
-  if (loading) return <Spinner />;
-
-  return isAuthenticated ? children : <Navigate to="/" />;
+  return user ? children : <Navigate to="/" />;
 }
