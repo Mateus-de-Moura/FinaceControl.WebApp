@@ -28,10 +28,18 @@ export const GetExpense = async (search: string,
 }
 
 export function CreateExpense(expense: any) {
-  return Api.post('/api/Expense', expense);
+  return Api.post('/api/Expense', expense, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 }
 export function UpdateExpense(expense: any) {
-  return Api.put('/api/Expense', expense);
+  return Api.put('/api/Expense', expense ,{
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 }
 
 export function GetById(id: string) {
