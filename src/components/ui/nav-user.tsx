@@ -32,7 +32,9 @@ import {
 import { useNotification } from '@/hooks/useNotification';
 import { toast } from 'react-toastify';
 import { useQuery } from '@tanstack/react-query';
-import { GetNotificationDoesNotRead } from "@/Services/NotifyService"
+import { GetNotificationDoesNotRead } from "@/Services/NotifyService";
+import authService from "@/Services/authService";
+import { useAuth } from "@/Pages/Auth/AuthContext"
 
 
 export function NavUser({
@@ -46,6 +48,7 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
   const navigate = useNavigate()
+   const { logout } = useAuth();
 
   const notificationQuery = useQuery({
     queryKey: ['notification'],
@@ -72,9 +75,20 @@ export function NavUser({
     notificationQuery.refetch();
   });
 
-  function logout() {
-    localStorage.removeItem('loginData');
-    window.location.reload();
+  async function logoutSide() {    
+    try {     
+      await authService.logout();      
+     
+      logout();      
+      
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+    } catch (error) {
+      console.error('Erro durante logout:', error);      
+      logout();
+      window.location.reload();
+    }
   }
 
   const unreadNotifications = totoalNotification;
@@ -145,7 +159,7 @@ export function NavUser({
 
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => logout()}>
+            <DropdownMenuItem onClick={() => logoutSide()}>
               <LogOutIcon />
               Log out
             </DropdownMenuItem>

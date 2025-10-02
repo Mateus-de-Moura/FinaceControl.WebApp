@@ -33,27 +33,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (user) {
-      localStorage.setItem('loginData', JSON.stringify(user)); 
+      localStorage.setItem('loginData', JSON.stringify(user));
       setIsAuthenticated(true);
     } else {
-      localStorage.removeItem('loginData'); 
+      localStorage.removeItem('loginData');
       setIsAuthenticated(false);
     }
   }, [user]);
 
-  
+
   const login = (userData: AuthUser) => {
-    setUser(userData);  
+    setUser(userData);
   };
-  
+
   const logout = () => {
-    setUser(null); 
+    setUser(null);
+    localStorage.removeItem('loginData');
+    setIsAuthenticated(false);
   };
 
   const updatePhoto = (newPhoto: string) => {
     if (user) {
       const updatedUser = { ...user, photo: newPhoto };
-      setUser(updatedUser); 
+      setUser(updatedUser);
     }
   };
 

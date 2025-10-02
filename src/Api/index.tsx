@@ -14,14 +14,20 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401) {
-      try {
-        const storedData = localStorage.getItem('loginData');
-        var data = JSON.parse(storedData!) as AuthUser;
-        
-        await authService.refreshToken(data.email, data.refreshToken);
-
-      } catch (refreshError) {
+    if (error.response?.status === 401) {      
+      const isLogoutRequest = error.config?.url?.includes('/auth/logout') || 
+                             error.config?.url?.includes('/logout');
+      
+      if (!isLogoutRequest) {
+        try {
+          const storedData = localStorage.getItem('loginData');
+          if (storedData) {
+            var data = JSON.parse(storedData) as AuthUser;
+            await authService.refreshToken(data.email, data.refreshToken);
+          }
+        } catch (refreshError) {          
+          localStorage.removeItem('loginData');
+        }
       }
     }
 
