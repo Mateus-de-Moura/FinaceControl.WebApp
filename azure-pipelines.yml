@@ -8,8 +8,8 @@ variables:
   nodeVersion: '18.x'
   buildDir: 'dist'  
   destinationPath: 'C:\Users\Mateus\Desktop\PublishWeb' 
-  #viteApiUrl: 'http://192.168.18.198:8080/'  
-  viteApiUrl: 'http://localhost:8080/'
+  viteApiUrl: 'http://192.168.18.198:8080/'  
+  #viteApiUrl: 'http://localhost:8080/'
 
 steps:
 - task: NodeTool@0
