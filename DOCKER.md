@@ -14,6 +14,7 @@ O sistema ficara disponivel em:
 
 - Aplicacao: http://localhost:8085
 - API/Swagger: http://localhost:8080/swagger
+- Hangfire: http://localhost:8081/hangfire
 - RabbitMQ: http://localhost:15672 (usuario e senha: `guest`)
 
 ## Proximas execucoes
@@ -34,4 +35,4 @@ Para parar os containers sem apagar os dados:
 docker compose down
 ```
 
-O SQL Server faz parte da mesma rede Docker da API e seus dados ficam persistidos no volume `finance-control-sql`.
+Frontend, API, Hangfire, SQL Server e RabbitMQ sobem juntos pelo mesmo Compose. Os dados do SQL ficam persistidos no volume `finance-control-sql`.

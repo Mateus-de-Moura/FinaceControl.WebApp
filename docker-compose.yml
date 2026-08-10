@@ -15,6 +15,7 @@ services:
     build:
       context: ../Finance_Control_Api
       dockerfile: Dockerfile
+      target: api
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
@@ -27,6 +28,25 @@ services:
       OpenTelemetry__Enabled: "false"
     ports:
       - "8080:8080"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  hangfire:
+    build:
+      context: ../Finance_Control_Api
+      dockerfile: Dockerfile
+      target: hangfire
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: Server=sqlserver,1433;Database=FinanceControlApi;User Id=${SQL_USER:-finance};Password=${SQL_PASSWORD};TrustServerCertificate=True
+      RabbitMq__Host: rabbitmq
+    ports:
+      - "127.0.0.1:8081:8080"
     depends_on:
       sqlserver:
         condition: service_healthy
