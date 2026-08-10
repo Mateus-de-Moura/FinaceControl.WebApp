@@ -1,7 +1,8 @@
 // src/services/signalRService.ts
 import * as signalR from '@microsoft/signalr';
 
-const API_Signal = "http://localhost:8080/notifyHub";
+const apiBaseUrl = new URL(import.meta.env.VITE_API_URL || "/", window.location.origin);
+const API_Signal = new URL("notifyHub", apiBaseUrl).toString();
 
 let connection: signalR.HubConnection | null = null;
 const pendingInvokes: Array<() => Promise<void>> = [];

@@ -2,7 +2,7 @@ import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 export default function Login() {
     const CLIENT_ID = "Ov23lies5emdq1zn1jga";
-    const REDIRECT_URI = "http://localhost:5173/auth/callback";
+    const REDIRECT_URI = `${window.location.origin}/auth/callback`;
     const SCOPE = "read:user user:email";
 
     const handleLogin = () => {
