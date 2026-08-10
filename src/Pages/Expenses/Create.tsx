@@ -73,12 +73,9 @@ function Create() {
         formData.append("Active", String(data.Active));
         formData.append("IdExpense", data.IdExpense);        
         
-        if (data.Value) {            
-            const valueAsNumber = parseFloat(data.Value);         
-            formData.append("Value", valueAsNumber.toString().replace('.', ','));
-        } else {
-            formData.append("Value", data.Value);
-        }
+        // NumericFormat fornece o valor sem separador de milhar e com ponto
+        // decimal (ex.: 371.07), formato esperado pelo model binder da API.
+        formData.append("Value", String(data.Value));
         
         formData.append("DueDate", data.DueDate);
         formData.append("Status", String(data.Status));

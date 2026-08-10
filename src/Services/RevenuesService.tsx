@@ -1,9 +1,9 @@
 import Api from '../Api/index';
 
-export const GetRevenues = async (search: string, page: number, startDate?: Date | null, endDate?: Date | null) => {
+export const GetRevenues = async (search: string, page: number, pageSize: number, startDate?: Date | null, endDate?: Date | null) => {
   const params = new URLSearchParams();
   params.append("PageNumber", String(page));
-  params.append("PageSize", "10");
+  params.append("PageSize", String(pageSize));
 
   if (search) params.append("Description", search);
 

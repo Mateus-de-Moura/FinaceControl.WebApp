@@ -2,13 +2,14 @@ import Api from '../Api/index';
 
 export const GetExpense = async (search: string,
   page: number,
+  pageSize: number,
   status: string,
   startDate?: Date | null,
   endDate?: Date | null) => {
 
   const params = new URLSearchParams();
   params.append("PageNumber", String(page));
-  params.append("PageSize", "10");
+  params.append("PageSize", String(pageSize));
 
   if (search) params.append("Description", search);
   if (status) params.append("Status", status);

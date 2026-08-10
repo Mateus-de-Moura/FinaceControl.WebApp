@@ -32,11 +32,10 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div className="rounded-md border overflow-hidden">
-      {/* Container para permitir rolagem horizontal */}
-      <div className="overflow-x-auto">
+    <div className="h-full overflow-hidden rounded-md border">
+      <div className="h-full overflow-auto">
         <Table className="min-w-full">
-          <TableHeader className="bg-[#2898f5] rounded-t-md">
+          <TableHeader className="sticky top-0 z-10 bg-[#2898f5] rounded-t-md">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (

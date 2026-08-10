@@ -1,7 +1,7 @@
 import Api from '../Api/index';
 
-export const GetUsers = async (search: string, page: number) => {
-  const response = await Api.get(`/api/User?PageNumber=${page}&PageSize=10&Description=${encodeURIComponent(search)}`);
+export const GetUsers = async (search: string, page: number, pageSize: number) => {
+  const response = await Api.get(`/api/User?PageNumber=${page}&PageSize=${pageSize}&Description=${encodeURIComponent(search)}`);
 
   if (response.data?.responseInfo?.httpStatus >= 400) {
     const errorMessage = response.data.responseInfo?.errorDescription || "Erro desconhecido";

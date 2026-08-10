@@ -1,8 +1,8 @@
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Link } from "react-router"
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, } from "@/components/ui/pagination"
 import { useState } from "react"
 import { DataTable } from "@/components/ui/DataTable/data-table"
+import { TablePagination } from "@/components/ui/DataTable/table-pagination"
 import { useQuery } from "@tanstack/react-query";
 import { GetUsers } from "@/Services/UsersService"
 import { useMemo } from "react";
@@ -24,12 +24,13 @@ interface UsersTableProps {
 function index() {
 
     const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
     const [search, setSearch] = useState("");
     const [inputUser, setInputUser] = useState("");
 
     const usersQuery = useQuery({
-        queryKey: ['users', search, page],
-        queryFn: () => GetUsers(search, page),
+        queryKey: ['users', search, page, pageSize],
+        queryFn: () => GetUsers(search, page, pageSize),
     });
 
     const currentPage = page;
@@ -42,8 +43,6 @@ function index() {
     };
 
     const data = usersQuery.data?.items || [];
-
-    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     const usersColumns = useMemo<ColumnDef<UsersTableProps>[]>(
         () => [
@@ -115,7 +114,7 @@ function index() {
                 <h6 className="font-semibold">Gerenciamento de Usuários</h6>
                 <Link to="/Users/Create" className={buttonVariants({ variant: "default", size: "sm" })}>Cadastrar novo Usuário</Link>
             </div>
-            <Card className="p-5 bg-white h-[620px]">
+            <Card className="flex h-[620px] flex-col bg-white p-5">
                 <div className='w-full flex justify-end gap-2'>
                     <div className='w-72 self-end '>
                         <Input
@@ -132,51 +131,15 @@ function index() {
                     </div>
                 </div>
 
-                <div className="mt-3 mb-3 h-full">
-                    <div className={`transition-opacity duration-300 ease-in-out ${usersQuery.isLoading ? 'opacity-50' : 'opacity-100'}`}>
+                <div className="my-3 min-h-0 flex-1">
+                    <div className={`h-full transition-opacity duration-300 ease-in-out ${usersQuery.isLoading ? 'opacity-50' : 'opacity-100'}`}>
                         <DataTable columns={usersColumns} data={data} />
                     </div>
                 </div>
 
-                <div className="pl-6 pr-6 mt-5">
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious
-
-                                    onClick={() => handlePageChange(currentPage - 1)}
-                                    className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
-                                />
-                            </PaginationItem>
-
-                            {pages.map(p => (
-                                <PaginationItem key={p}>
-                                    <PaginationLink
-
-                                        isActive={p === currentPage}
-                                        onClick={() => handlePageChange(p)}
-                                    >
-                                        {p}
-                                    </PaginationLink>
-                                </PaginationItem>
-                            ))}
-
-                            <PaginationItem>
-                                <PaginationNext
-
-                                    onClick={() => handlePageChange(currentPage + 1)}
-                                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
-                                />
-                            </PaginationItem>
-
-                            <PaginationItem>
-                                <div className="ml-8">Mostrando {data.length} de {totalCount} Registros</div>
-                            </PaginationItem>
-
-
-                        </PaginationContent>
-                    </Pagination>
-                </div>
+                <TablePagination page={currentPage} totalPages={totalPages} totalCount={totalCount ?? 0}
+                    pageSize={pageSize} onPageChange={handlePageChange}
+                    onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} />
 
             </Card>
         </div>

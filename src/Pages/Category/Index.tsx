@@ -8,7 +8,7 @@ import { Link } from "react-router";
 import True from "../../assets/true.svg";
 import False from "../../assets/false.svg";
 import { Edit } from "react-feather";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, } from "@/components/ui/pagination";
+import { TablePagination } from "@/components/ui/DataTable/table-pagination";
 import { Card } from "@/components/ui/card";
 import { SearchWithDate } from "@/components/SearchWithDate";
 
@@ -21,11 +21,12 @@ interface CategoryTableProps {
 function Index() {
 
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState("");
 
   const categoriesQuery = useQuery({
-    queryKey: ["categories", search, page],
-    queryFn: () => GetCategories(search, page),
+    queryKey: ["categories", search, page, pageSize],
+    queryFn: () => GetCategories(search, page, pageSize),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     retry: false,
@@ -41,8 +42,6 @@ function Index() {
   };
 
   const data = categoriesQuery?.data?.items || [];
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-
   const categoryColumns = useMemo<ColumnDef<CategoryTableProps>[]>(
     () => [
       {
@@ -127,7 +126,7 @@ function Index() {
           Cadastrar nova categoria
         </Link>
       </div>
-      <Card className="p-5 bg-white h-[620px]">
+      <Card className="flex h-[620px] flex-col bg-white p-5">
         <div className='w-full flex justify-end gap-2'>
           <SearchWithDate
             showRangeDate={false}
@@ -137,50 +136,14 @@ function Index() {
           />
         </div>
 
-        <div className="mt-3 mb-3 h-full">
-          <div className={`transition-all duration-500 ease-in-out ${categoriesQuery.isLoading ? 'opacity-40 blur-[1px]' : 'opacity-100 blur-0'}`}>
+        <div className="my-3 min-h-0 flex-1">
+          <div className={`h-full transition-all duration-500 ease-in-out ${categoriesQuery.isLoading ? 'opacity-40 blur-[1px]' : 'opacity-100 blur-0'}`}>
             <DataTable columns={categoryColumns} data={data} />
           </div>
         </div>
-        <div className="pl-6 pr-6 mt-5">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
-                />
-              </PaginationItem>
-
-              {pages.map(p => (
-                <PaginationItem key={p}>
-                  <PaginationLink
-
-                    isActive={p === currentPage}
-                    onClick={() => handlePageChange(p)}
-                  >
-                    {p}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-
-              <PaginationItem>
-                <PaginationNext
-
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
-                />
-              </PaginationItem>
-
-              <PaginationItem>
-                <div className="ml-8">Mostrando {data.length} de {totalCount} Registros</div>
-              </PaginationItem>
-
-
-            </PaginationContent>
-          </Pagination>
-        </div>
+        <TablePagination page={currentPage} totalPages={totalPages} totalCount={totalCount ?? 0}
+          pageSize={pageSize} onPageChange={handlePageChange}
+          onPageSizeChange={(size) => { setPageSize(size); setPage(1); }} />
       </Card>
     </div>
   );

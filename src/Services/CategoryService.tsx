@@ -5,10 +5,10 @@ export const GetAllCategories = async () => {
   return response.data;
 };
 
-export const GetCategories = async (search: string, page: number) => {
+export const GetCategories = async (search: string, page: number, pageSize: number) => {
   const params = new URLSearchParams();
   params.append("PageNumber", String(page));
-  params.append("PageSize", "10");
+  params.append("PageSize", String(pageSize));
 
   if (search) params.append("Description", search);
 
