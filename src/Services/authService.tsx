@@ -21,18 +21,16 @@ export interface responseInfo {
 interface LoginUserCommand {
   email: string;
   password: string;
-  latitude?: string;
-  longitude?: string;
 }
 
 const authService = {
-  login: async (email: string, password: string) => {
+  login: async (username: string, password: string) => {
     const loginData: LoginUserCommand = {
-      email,
+      email: username,
       password,
     };
     const response = await Api.post<AuthUser>("/Auth/Login", loginData);
-    await fetchLocationData(email, true);
+    await fetchLocationData(response.data.email, true);
     return response.data;
   },
 

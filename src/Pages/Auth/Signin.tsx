@@ -15,13 +15,13 @@ import Login from "@/components/login-github"
 function Signin() {
 
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [emailInvalid, setEmailInvalid] = useState(false);
+  const [usernameInvalid, setUsernameInvalid] = useState(false);
   const { setUser } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
-  const { mutate: loginUser, isPending } = useLoginUser(email, password);
+  const { mutate: loginUser, isPending } = useLoginUser(username, password);
 
   const handleLoginSuccess = (data: any) => {
     setUser(data)    
@@ -29,10 +29,17 @@ function Signin() {
   };
 
   const handleLoginError = () => {   
-    setEmailInvalid(true);
+    setUsernameInvalid(true);
   };
 
-  const handleLogin = () => {
+  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!username.trim() || !password) {
+      setUsernameInvalid(true);
+      return;
+    }
+
+    setUsernameInvalid(false);
     loginUser(undefined, {
       onSuccess: handleLoginSuccess,
       onError: handleLoginError,
@@ -55,13 +62,17 @@ function Signin() {
               Entre com sua conta
             </CardTitle>
             <CardDescription>
-              Utilize seu e-mail e senha ou Github para se conectar
+              Utilize seu nome de usuário e senha ou GitHub para se conectar
             </CardDescription>
           </CardHeader>
           <CardContent>
+            <form onSubmit={handleLogin}>
             <div className="mt-4">
-              <Label htmlFor="email">E-mail</Label>
-              <Input placeholder="exemplo@email.com" id="email" type="email" onChange={e => setEmail(e.target.value)} />
+              <Label htmlFor="username">Nome de usuário</Label>
+              <Input placeholder="seu nome de usuário" id="username" type="text" value={username} onChange={e => setUsername(e.target.value)} autoComplete="username" autoFocus />
+              {usernameInvalid &&
+                <span className="text-red-500">Nome de usuário ou senha incorretos</span>
+              }
             </div>
             <div className="mt-4">
               <Label htmlFor="senha">Senha</Label>
@@ -70,24 +81,24 @@ function Signin() {
                   placeholder="sua senha"
                   id="senha"
                   type={showPassword ? "text" : "password"}
+                  value={password}
                   onChange={e => setPassword(e.target.value)}
                   className="pr-10"
+                  autoComplete="current-password"
                 />
                 <button
                   type="button"
                   className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
                   onClick={() => setShowPassword(prev => !prev)}
+                  aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                 >
                   {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                 </button>
-
               </div>
-              {emailInvalid &&
-                <span className="text-red-500">E-mail ou Senha incorretos</span>
-              }
             </div>
 
-            <Button className="mt-6 w-full bg-blue-600 " onClick={handleLogin} disabled={isPending}>Entrar</Button>
+            <Button className="mt-6 w-full bg-blue-600 " type="submit" disabled={isPending}>Entrar</Button>
+            </form>
             <div className="flex items-center gap-6 mt-4">
               <Separator />
               <span className="text-xs text-muted-foreground ">OU </span>
