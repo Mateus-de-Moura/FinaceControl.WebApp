@@ -149,7 +149,7 @@ function Index() {
         cell: ({ row }) => {
           const expense = row.original;
           return (
-            <DropdownMenu>
+            <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" aria-label={`Ações da despesa ${expense.description}`}>
                   <MoreVertical size={18} />
@@ -161,7 +161,10 @@ function Index() {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   disabled={expense.statusName === "Pago"}
-                  onSelect={() => openPaymentModal(expense)}
+                  onSelect={() => {
+                    // Aguarda o menu liberar o foco antes de abrir o modal.
+                    window.setTimeout(() => openPaymentModal(expense), 0);
+                  }}
                 >
                   <ReceiptText /> Faturar
                 </DropdownMenuItem>
