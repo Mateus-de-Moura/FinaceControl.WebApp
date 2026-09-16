@@ -2,10 +2,11 @@ import { useMemo, useState } from "react";
 import { DataTable } from "@/components/ui/DataTable/data-table";
 import { TablePagination } from "@/components/ui/DataTable/table-pagination";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit } from "react-feather";
+import { Edit, MoreVertical } from "react-feather";
+import { ReceiptText } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
-import { GetExpense } from "@/Services/ExpenseService";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { GetExpense, PayExpense } from "@/Services/ExpenseService";
 import {
   Select,
   SelectContent,
@@ -18,22 +19,52 @@ import { SearchWithDate } from "@/components/SearchWithDate"
 import {  buttonVariants } from "@/components/ui/button"
 import True from '../../assets/true.svg'
 import False from '../../assets/false.svg'
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { toast } from "react-toastify";
 
 interface UsersTableProps {
-  Id: string;
-  Description: string;
+  id: string;
+  description: string;
   value: string;
-  DueDate: Date;
-  CategoryName: string;
-  StatusName: string;
+  statusName: string;
 }
+
+const currencyToNumber = (value: string) =>
+  Number(value.replace(/[^\d,-]/g, "").replace(/\./g, "").replace(",", "."));
 
 function Index() {
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(50);
   const [search, setSearch] = useState("");
   const [selectStatus, setStatus] = useState("");
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
+  const [expenseToPay, setExpenseToPay] = useState<UsersTableProps | null>(null);
+  const [paymentDate, setPaymentDate] = useState(new Date().toISOString().slice(0, 10));
+  const [paymentValue, setPaymentValue] = useState("");
+  const queryClient = useQueryClient();
+
+  const paymentMutation = useMutation({
+    mutationFn: () => PayExpense(expenseToPay!.id, {
+      paymentDate,
+      value: Number(paymentValue),
+    }),
+    onSuccess: async () => {
+      toast.success("Despesa faturada com sucesso.");
+      setExpenseToPay(null);
+      await queryClient.invalidateQueries({ queryKey: ["expense"] });
+    },
+    onError: () => toast.error("Não foi possível faturar a despesa. Tente novamente."),
+  });
+
+  const openPaymentModal = (expense: UsersTableProps) => {
+    setExpenseToPay(expense);
+    setPaymentDate(new Date().toISOString().slice(0, 10));
+    setPaymentValue(String(currencyToNumber(expense.value)));
+  };
 
   const usersQuery = useQuery({
     queryKey: ["expense", search, page, pageSize, selectStatus, dateRange],
@@ -114,12 +145,28 @@ function Index() {
       },
       {
         header: "",
-        accessorKey: "id",
-        cell: (info) => {
+        id: "actions",
+        cell: ({ row }) => {
+          const expense = row.original;
           return (
-            <Link to={`/Despesas/Update/${info.getValue()}`}>
-              <Edit size={16} />
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label={`Ações da despesa ${expense.description}`}>
+                  <MoreVertical size={18} />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link to={`/Despesas/Update/${expense.id}`}><Edit size={16} /> Editar</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  disabled={expense.statusName === "Pago"}
+                  onSelect={() => openPaymentModal(expense)}
+                >
+                  <ReceiptText /> Faturar
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           );
         },
         meta: {
@@ -190,6 +237,36 @@ function Index() {
           onPageSizeChange={(size) => { setPageSize(size); setPage(1); }}
         />
       </Card>
+
+      <Dialog open={Boolean(expenseToPay)} onOpenChange={(open) => !open && setExpenseToPay(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Faturar despesa</DialogTitle>
+            <DialogDescription>
+              Tem certeza de que deseja faturar o débito “{expenseToPay?.description}”? Ao confirmar, ele será marcado como pago.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-2">
+            <div className="grid gap-2">
+              <Label htmlFor="payment-date">Data do pagamento</Label>
+              <Input id="payment-date" type="date" value={paymentDate} onChange={(event) => setPaymentDate(event.target.value)} />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="payment-value">Valor</Label>
+              <Input id="payment-value" type="number" min="0.01" step="0.01" value={paymentValue} onChange={(event) => setPaymentValue(event.target.value)} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setExpenseToPay(null)} disabled={paymentMutation.isPending}>Cancelar</Button>
+            <Button
+              onClick={() => paymentMutation.mutate()}
+              disabled={paymentMutation.isPending || !paymentDate || Number(paymentValue) <= 0}
+            >
+              {paymentMutation.isPending ? "Faturando..." : "Faturar"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

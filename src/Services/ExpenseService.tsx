@@ -46,3 +46,12 @@ export function UpdateExpense(expense: any) {
 export function GetById(id: string) {
   return Api.get(`/api/Expense/update/${id}`)
 }
+
+export interface PayExpenseRequest {
+  paymentDate: string;
+  value: number;
+}
+
+export function PayExpense(id: string, payment: PayExpenseRequest) {
+  return Api.put(`/api/Expense/Despesas/${id}`, payment);
+}
